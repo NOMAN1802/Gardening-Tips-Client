@@ -10,7 +10,7 @@ const slides = [
     title: "Indoor Gardening",
     description: " Small indoor spaces with ample sunlight.",
     img: "https://images.pexels.com/photos/5561354/pexels-photo-5561354.jpeg?auto=compress&cs=tinysrgb&w=800",
-    url: "/ppsts",
+    url: "/posts",
     bg: "bg-gradient-to-r from-red-200 to-default-50",
   },
   {
@@ -56,7 +56,7 @@ const Slider = () => {
               </h1>
               <Link href={slide.url}>
                 <button className="rounded-md bg-black text-white py-3 px-4 ">
-                  SHOP NOW
+                  Explore Now
                 </button>
               </Link>
             </div>
