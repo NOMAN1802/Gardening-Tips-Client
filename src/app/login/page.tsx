@@ -16,32 +16,34 @@ import PLInput from "@/src/components/Form/PLInput";
 import PLForm from "@/src/components/Form/PLForm";
 import Container from "@/src/components/Container/Container";
 import PageTitle from "@/src/components/PageTitle/PageTitle";
+import { useUser } from "@/src/context/user.provider";
+import { useUserLogin } from "@/src/hooks/auth.hook";
 
 
 const LoginPage = () => {
   const [viewPassword, setViewPassword] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
-  // const { setIsLoading: userLoading } = useUser();
+  const { setIsLoading: userLoading } = useUser();
 
   const redirect = searchParams.get("redirect");
 
-  // const { mutate: handleUserLogin, isPending, isSuccess } = useUserLogin();
+  const { mutate: handleUserLogin, isPending, isSuccess } = useUserLogin();
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    // handleUserLogin(data);
-    // userLoading(true);
+    handleUserLogin(data);
+    userLoading(true);
   };
 
-  // useEffect(() => {
-  //   if (!isPending && isSuccess) {
-  //     if (redirect) {
-  //       router.push(redirect);
-  //     } else {
-  //       router.push("/");
-  //     }
-  //   }
-  // }, [isPending, isSuccess]);
+  useEffect(() => {
+    if (!isPending && isSuccess) {
+      if (redirect) {
+        router.push(redirect);
+      } else {
+        router.push("/");
+      }
+    }
+  }, [isPending, isSuccess]);
  
   
   const handleViewPassword = () => {
@@ -49,7 +51,7 @@ const LoginPage = () => {
   };
     return (
         <Container>
-        {/* {isPending && <Loading />} */}
+        {isPending && <Loading />}
         <PageTitle subHeading="Welcome Back! Let&lsquo;s Get Started" heading="Login with Planto"/>
         <div className="flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center">
         <motion.div
@@ -94,9 +96,7 @@ const LoginPage = () => {
               </Button>
             </div>
 
-            
-          </PLForm>
-          <div className="text-center">
+            <div className="text-center">
             <button className="text-xs hover:underline hover:text-rose-500 text-default-400">
               Forgot password?
             </button>
@@ -110,6 +110,8 @@ const LoginPage = () => {
               </p>
             </Link>
           </div>
+          </PLForm>
+         
         </motion.div>
       </div>
     </Container>

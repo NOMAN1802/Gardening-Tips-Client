@@ -20,23 +20,15 @@ import Link from "next/link";
 import { Button } from "@nextui-org/button";
 import { ThemeSwitch } from "../ThemeSwitch/theme-switch";
 import NavbarDropdown from "./NavbarDropdown";
+import { useUser } from "@/src/context/user.provider";
 
 export const Navbar = () => {
-  
+  const { user, isLoading } = useUser();
    const pathname = usePathname();
   // State to track the active link
   const [activeLink, setActiveLink] = useState(pathname);
 
-  // const user = {
-  //   name: "Mir",
-  //   email:'noman@gmail.com',
-  //   token: "adsf asda",
-  //   role: "ADMIN",
-  //   profilePhoto: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fpngtree.com%2Fso%2Fprofile-icon&psig=AOvVaw1LOvv6Oq8ZVQiNhW-cdf0o&ust=1727690354142000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCNClrqDy54gDFQAAAAAdAAAAABAE'
-     
-  // };
-
-  const user = undefined;
+ 
 
   const handleLinkClick = (href: string) => {
     setActiveLink(href);

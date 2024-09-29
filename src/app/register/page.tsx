@@ -17,11 +17,12 @@ import Container from "@/src/components/Container/Container";
 import PLInput from "@/src/components/Form/PLInput";
 import PLForm from "@/src/components/Form/PLForm";
 import PageTitle from "@/src/components/PageTitle/PageTitle";
+import { useUserRegistration } from "@/src/hooks/auth.hook";
 
 const RegisterPage = () => {
 
   const [viewPassword, setViewPassword] = useState(false);
-    // const {mutate: handleUserRegistration,isPending  } = useUserRegistration()
+    const {mutate: handleUserRegistration,isPending  } = useUserRegistration()
    
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const userData = {
@@ -32,7 +33,7 @@ const RegisterPage = () => {
     
         console.log("Inside form user data: ", userData);
 
-        // handleUserRegistration(userData);
+        handleUserRegistration(userData);
       };
     
      const handleViewPassword = () => {
@@ -41,7 +42,7 @@ const RegisterPage = () => {
       
     return (
       <Container>
-      {/* {isPending && <Loading />} */}
+      {isPending && <Loading />}
 
       <PageTitle heading="Register with Planto" subHeading="Make the word ever green together"/>
 

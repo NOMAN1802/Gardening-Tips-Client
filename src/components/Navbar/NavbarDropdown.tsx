@@ -5,30 +5,22 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-o
 import { usePathname, useRouter } from "next/navigation";
 import { protectedRoutes } from "@/src/constants";
 import { adminLinks, LinkItem, userLinks } from "./constant";
+import { useUser } from "@/src/context/user.provider";
+import { logout } from "@/src/services/AuthService";
 
 
 const NavbarDropdown = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-      const user = {
-      name: "Mir",
-      token: "adsf asda",
-      role: "ADMIN",
-      profilePhoto: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fpngtree.com%2Fso%2Fprofile-icon&psig=AOvVaw1LOvv6Oq8ZVQiNhW-cdf0o&ust=1727690354142000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCNClrqDy54gDFQAAAAAdAAAAABAE'
-       
-    };
-
-//   const user = undefined;
+  const { user, setIsLoading: userLoading } = useUser();
 
   const handleLogout = () => {
-    // logout();
-    // userLoading(true);
-    // if (protectedRoutes.some((route) => pathname.match(route))) {
-    //   router.push('/');
-    // }
-
-    console.log('logged out')
+    logout();
+    userLoading(true);
+    if (protectedRoutes.some((route) => pathname.match(route))) {
+      router.push('/');
+    }
   };
 
   const handleNavigation = (path: string) => {
