@@ -12,17 +12,20 @@ import { FaMobile, FaPersonBooth } from "react-icons/fa";
 import { MdOutlineAttachEmail } from "react-icons/md";
 import { AiOutlineLock } from "react-icons/ai";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Container from "@/src/components/Container/Container";
 import PLInput from "@/src/components/Form/PLInput";
 import PLForm from "@/src/components/Form/PLForm";
 import PageTitle from "@/src/components/PageTitle/PageTitle";
 import { useUserRegistration } from "@/src/hooks/auth.hook";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const RegisterPage = () => {
 
+  const router = useRouter();
+
   const [viewPassword, setViewPassword] = useState(false);
-    const {mutate: handleUserRegistration,isPending  } = useUserRegistration()
+    const {mutate: handleUserRegistration, isPending, isSuccess  } = useUserRegistration()
    
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         const userData = {
@@ -35,6 +38,12 @@ const RegisterPage = () => {
 
         handleUserRegistration(userData);
       };
+
+      useEffect(() => {
+        if (!isPending && isSuccess) {
+          router.push("/login");
+        }
+      }, [isPending, isSuccess]);
     
      const handleViewPassword = () => {
     setViewPassword(!viewPassword);
