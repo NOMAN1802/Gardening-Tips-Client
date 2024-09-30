@@ -16,7 +16,7 @@ const PostCategories: React.FC = () => {
     const updatedSearchParams = new URLSearchParams(searchParams.toString());
     updatedSearchParams.set('category', label);
 
-    router.push(`/posts?${updatedSearchParams.toString()}`);
+    router.push(`/post-category?${updatedSearchParams.toString()}`);
   };
 
   return (
@@ -24,7 +24,7 @@ const PostCategories: React.FC = () => {
       <div className="overflow-x-hidden px-6 py-10">
         <SectionTitle heading="Post Categories" />
         
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6  gap-6">
           {postCategories.map((item) => (
             <PostCategoryCard
               label={item.label}
