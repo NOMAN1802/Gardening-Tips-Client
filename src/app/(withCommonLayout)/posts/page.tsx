@@ -3,12 +3,12 @@ import Container from "@/src/components/Container/Container";
 import FilteredPosts from "@/src/components/FilteredPosts/FilteredPosts";
 import { getAllPosts } from "@/src/services/PostService";
 
-const CombinedPage = async ({
+const NewsFeedPage = async ({
   searchParams,
 }: {
   searchParams: URLSearchParams;
 }) => {
-  const params = new URLSearchParams(searchParams); // Create a new instance of URLSearchParams
+  const params = new URLSearchParams(searchParams); 
   const category = params.get("category") || undefined; 
 
   // Fetch posts based on category
@@ -24,4 +24,4 @@ const CombinedPage = async ({
   );
 };
 
-export default CombinedPage;
+export default NewsFeedPage;

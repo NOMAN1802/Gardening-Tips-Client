@@ -1,6 +1,7 @@
-// services/PostService.ts
 import envConfig from "@/src/config/envConfig";
 import { delay } from "@/src/utils/delay";
+import axiosInstance from "@/src/lib/AxiosInstance";
+import { revalidateTag } from "next/cache";
 
 export const getAllPosts = async (type?: string, wait = false, category?: string) => {
   let fetchOptions: RequestInit = {
@@ -33,3 +34,60 @@ export const getAllPosts = async (type?: string, wait = false, category?: string
 
   return res.json();
 };
+
+
+export const getPost = async( id:string) =>{
+
+    const res = await fetch(`${envConfig.baseApi}/posts/${id}`);
+    return res.json();
+   
+}
+
+export const createComment = async (postId: string, formData: FormData): Promise<any> => {
+    try {
+      // Use template literals to dynamically include the `postId` in the route
+      const { data } = await axiosInstance.post(`/posts/${postId}/comments`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      revalidateTag("posts");
+  
+      return data;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Failed to create comment");
+    }
+  };
+  
+  
+
+  export const editComment = async (postId: string, commentId: string, commentData: FormData): Promise<any> => {
+    try {
+      const { data } = await axiosInstance.patch(`/posts/${postId}/comments/${commentId}`, commentData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      revalidateTag(`post-${postId}-comments`);
+      return data;
+    } catch (error) {
+      console.error(error);
+      throw new Error("Failed to edit comment");
+    }
+  };
+  
+
+  export const deleteComment = async (postId: string, commentId: string): Promise<any> => {
+    try {
+      const { data } = await axiosInstance.delete(`/posts/${postId}/comments/${commentId}`);
+  
+      revalidateTag(`post-${postId}-comments`);
+      return data;
+    } catch (error) {
+      console.error(error);
+      throw new Error("Failed to delete comment");
+    }
+  };
