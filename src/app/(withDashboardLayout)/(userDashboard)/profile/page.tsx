@@ -1,3 +1,4 @@
+// src/pages/UserProfilePage.tsx
 "use client";
 import { Badge } from "@nextui-org/badge";
 import { Button } from "@nextui-org/button";
@@ -5,20 +6,18 @@ import { Avatar } from "@nextui-org/avatar";
 import { BsCheckCircle, BsArrowUpCircle, BsPersonPlus, BsPersonDash } from "react-icons/bs";
 import { useState } from "react";
 import { useUser } from "@/src/context/user.provider";
+import AddPostModal from "@/src/components/AddPostModal/AddPostModal";
 
 const UserProfilePage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
   // Mock user data
   const user = {
     name: "Aiko Nakamura",
-    profilePhoto: "your-profile-image-url", // Replace with actual image URL
-    upvoteCount: 324, // User's upvote count
-    isVerified: true, // Set to true for verification
-    posts: 14, // Number of posts or contributions
-    package: {
-      name: "Premium",
-      issuedDate: "2024-01-01",
-      expiryDate: "2025-01-01",
-    },
+    profilePhoto: "your-profile-image-url", 
+    upvoteCount: 324, 
+    isVerified: true, 
+    posts: 14, 
   };
   // const  {user, isLoading} = useUser();
 
@@ -39,13 +38,23 @@ const UserProfilePage = () => {
     );
   };
 
+  const handleSubmitPost = (postData: any) => {
+    // Here you would typically send the post data to your backend
+    console.log(postData);
+    // Implement your post submission logic here
+    setIsModalOpen(false);  // Close the modal after submission
+  };
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   return (
-    <div className="flex flex-col sm:flex-row ">
+    <div className="flex flex-col sm:flex-row">
       {/* Left Side - Profile Section */}
       <div className="flex-1 p-6 text-default-900 bg-default-100 rounded-md">
         {/* Profile Info Card */}
         <div className="bg-default-100 p-6 rounded-lg shadow-xl">
-          <div className="flex items-center">
+          <div className="flex items-center justify-between">
             {/* Profile Avatar with Verification */}
             <div className="relative">
               <Avatar
@@ -69,34 +78,21 @@ const UserProfilePage = () => {
                 <span className="ml-2 text-default-600">Upvotes: {user?.upvoteCount}</span>
               </div>
             </div>
-          </div>
-          {/* Verified Button */}
-          <div className="mt-4">
-            <Button
-              className={`px-4 py-2 rounded-lg ${user?.isVerified ? "bg-blue-500 text-white" : "bg-default-300 text-default-700"}`}
-              disabled
-            >
-              {user?.isVerified ? (
-                <>
-                  <BsCheckCircle className="mr-2" /> Verified
-                </>
-              ) : (
-                "Not Verified"
-              )}
-            </Button>
-          </div>
-        </div>
-
-        {/* Contributions & Package Info Card */}
-        <div className="bg-default-100 p-6 rounded-lg shadow-lg mt-4">
-          <div>
-            <span className="text-default-600">Contributions: {user?.postsCount} posts</span>
-          </div>
-          <div className="mt-2">
-            <span className="text-default-600">Package: <strong>{user?.package?.name}</strong></span>
-          </div>
-          <div className="text-sm text-default-500">
-            Issued: {user.package.issuedDate} | Expiry: {user?.package?.expiryDate}
+            {/* Verified Button */}
+            <div className="mt-4">
+              <Button
+                className={`px-4 py-2 rounded-lg ${user?.isVerified ? "bg-blue-500 text-white" : "bg-default-300 text-default-700"}`}
+                disabled
+              >
+                {user?.isVerified ? (
+                  <>
+                    <BsCheckCircle className="mr-2" /> Verified
+                  </>
+                ) : (
+                  "Not Verified"
+                )}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -105,10 +101,17 @@ const UserProfilePage = () => {
       <div className="mt-10 sm:ml-6 sm:w-1/3">
         {/* Centered Add Post Button */}
         <div className="mx-auto mb-6 flex justify-center">
-          <Button className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600">
+          <Button onClick={openModal} className="bg-blue-500 text-white px-4 py-4 rounded-lg shadow-md hover:bg-blue-600">
             Add Post
           </Button>
         </div>
+
+          {/* Add Post Modal */}
+      <AddPostModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onSubmit={handleSubmitPost}
+      />
 
         {/* People You May Know Section */}
         <h3 className="text-2xl font-bold mb-4">People You May Follow</h3>
@@ -144,6 +147,13 @@ const UserProfilePage = () => {
           ))}
         </div>
       </div>
+
+      Add Post Modal
+      <AddPostModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onSubmit={handleSubmitPost}
+      />
     </div>
   );
 };
