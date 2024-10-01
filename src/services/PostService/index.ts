@@ -1,7 +1,7 @@
 import envConfig from "@/src/config/envConfig";
 import { delay } from "@/src/utils/delay";
 import axiosInstance from "@/src/lib/AxiosInstance";
-import { revalidateTag } from "next/cache";
+// import { revalidateTag } from "next/cache";
 
 
 export const getAllPosts = async (type?: string, wait = false, category?: string) => {
@@ -39,7 +39,9 @@ export const getAllPosts = async (type?: string, wait = false, category?: string
 
 export const getPost = async( id:string) =>{
 
-    const res = await fetch(`${envConfig.baseApi}/posts/${id}`);
+    const res = await fetch(`${envConfig.baseApi}/posts/${id}`,{
+     cache:"no-store"
+    });
     return res.json();
    
 }
@@ -51,8 +53,8 @@ export const createComment = async (postId: string, commentData: { commentator: 
         "Content-Type": "application/json",
       },
     });
-    // Invalidate query or cache to refetch posts/comments
-    revalidateTag('posts');
+    
+    // revalidateTag('posts');
     return data;
   } catch (error) {
     console.error(error);

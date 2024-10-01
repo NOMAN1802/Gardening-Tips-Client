@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { createComment } from "../services/PostService";
 import { Comment } from "../components/Comment/Comment";
@@ -17,6 +17,29 @@ export const useCreateComment = (postId: string) => {
       },
     });
   };
+
+
+
+// export const useCreateComment = (postId: string) => {
+//   const queryClient = useQueryClient();
+
+//   return useMutation<any, Error, Comment>({
+//     mutationKey: ["CREATE_COMMENT", postId],
+//     mutationFn: async (commentData) => await createComment(postId, commentData),
+//     onSuccess: (newComment) => {
+//       toast.success("Comment created successfully...");
+//       queryClient.setQueryData(["post", postId], (oldData: any) => {
+//         return {
+//           ...oldData,
+//           comments: [...(oldData.comments || []), newComment],
+//         };
+//       });
+//     },
+//     onError: (error) => {
+//       toast.error(error.message || "Failed to create comment...");
+//     },
+//   });
+// };
   
 
   

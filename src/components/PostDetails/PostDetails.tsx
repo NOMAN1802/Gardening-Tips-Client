@@ -7,13 +7,14 @@ import { TPost } from '@/src/types';
 import PageTitle from '../PageTitle/PageTitle';
 import CommentSection from '../Comment/Comment';
 import { AiOutlineMessage } from 'react-icons/ai';
-
 interface PostDetailsProps {
-  post: TPost
+  post: TPost; 
+  refetchPost: () => void;
 }
 
-const PostDetails: React.FC<PostDetailsProps> = ({ post }) => {
-  const [upvoted, setUpvoted] = useState(false);
+
+const PostDetails: React.FC<PostDetailsProps> = ({ post, refetchPost }) => {
+const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
   const [favorite, setFavorite] = useState(false);
   const [following, setFollowing] = useState(false);
@@ -160,10 +161,10 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post }) => {
       </div>
       {/* Comments Section */}
       <div className=" my-6">
-           <CommentSection postId={post._id} />
+      <CommentSection postId={post._id} refetchPost={refetchPost} />
     </div>
 
-    <div className='mt-4 w-1/2 '>
+    <div className='mt-4 sm:w-full md:w-1/2 '>
         {post.comments && post.comments.length > 0 ? (
           post.comments.map((comment, index) => (
             <div key={index} className='mb-4 card w-2/3 bg-default-100 p-4 space-y-2 rounded-lg shadow-lg'>

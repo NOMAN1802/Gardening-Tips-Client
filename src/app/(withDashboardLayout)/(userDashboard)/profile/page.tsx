@@ -2,16 +2,17 @@
 import { Badge } from "@nextui-org/badge";
 import { Button } from "@nextui-org/button";
 import { Avatar } from "@nextui-org/avatar";
-import { BsCheckCircle, BsArrowUpCircle, BsPersonPlus, BsPersonDash } from 'react-icons/bs';
-import { useState } from 'react';
+import { BsCheckCircle, BsArrowUpCircle, BsPersonPlus, BsPersonDash } from "react-icons/bs";
+import { useState } from "react";
+import { useUser } from "@/src/context/user.provider";
 
 const UserProfilePage = () => {
   // Mock user data
   const user = {
     name: "Aiko Nakamura",
-    profilePhoto: "your-profile-image-url", 
+    profilePhoto: "your-profile-image-url", // Replace with actual image URL
     upvoteCount: 324, // User's upvote count
-    isVerified: false, // Is the user verified
+    isVerified: true, // Set to true for verification
     posts: 14, // Number of posts or contributions
     package: {
       name: "Premium",
@@ -19,6 +20,7 @@ const UserProfilePage = () => {
       expiryDate: "2025-01-01",
     },
   };
+  // const  {user, isLoading} = useUser();
 
   // Mock users list
   const usersList = [
@@ -38,74 +40,81 @@ const UserProfilePage = () => {
   };
 
   return (
-    <div className="flex-1 p-6 text-default-900 bg-default-100 rounded-md">
-      {/* Profile Section */}
-      <div className="bg-default-100 p-6 rounded-lg shadow-lg flex flex-col sm:flex-row sm:justify-between items-center">
-        {/* Left Section - Profile */}
-        <div className="flex items-center">
-          {/* Profile Avatar */}
-          <Avatar
-            src={user.profilePhoto}
-            className="rounded-full"
-            alt={`${user.name}'s profile`}
-          />
+    <div className="flex flex-col sm:flex-row ">
+      {/* Left Side - Profile Section */}
+      <div className="flex-1 p-6 text-default-900 bg-default-100 rounded-md">
+        {/* Profile Info Card */}
+        <div className="bg-default-100 p-6 rounded-lg shadow-xl">
+          <div className="flex items-center">
+            {/* Profile Avatar with Verification */}
+            <div className="relative">
+              <Avatar
+                src={user?.profilePhoto}
+                className={`rounded-full ${user?.isVerified ? "ring-4 ring-blue-500" : ""}`}
+                alt={`${user?.name}'s profile`}
+              />
+              {user?.isVerified && (
+                <Badge className="absolute bottom-0 right-0" shape="circle" variant="flat">
+                  <BsCheckCircle className="text-blue-500" />
+                </Badge>
+              )}
+            </div>
 
-          {/* User Info */}
-          <div className="ml-6">
-            {/* Name, Upvote, and Verification Section */}
-            <div className="flex items-center">
-              <h2 className="text-2xl font-bold text-default-800">{user.name}</h2>
-              <div className="ml-4 flex items-center space-x-2">
+            {/* User Info */}
+            <div className="ml-6">
+              <h2 className="text-2xl font-bold text-default-800">{user?.name}</h2>
+              {/* Upvote Count */}
+              <div className="mt-2 flex items-center">
                 <BsArrowUpCircle className="text-green-500 w-5 h-5" />
-                <span className="text-default-600">{user.upvoteCount}</span>
-                {user.isVerified && (
-                  <Button
-                    disabled
-                    className="bg-default-100 text-blue-600 px-4 py-1 rounded-lg flex items-center"
-                    
-                  >
-                    <BsCheckCircle className="text-blue-500 w-4 h-4 ml-1" />
-                    Verified
-                  </Button>
-                )}
+                <span className="ml-2 text-default-600">Upvotes: {user?.upvoteCount}</span>
               </div>
             </div>
           </div>
+          {/* Verified Button */}
+          <div className="mt-4">
+            <Button
+              className={`px-4 py-2 rounded-lg ${user?.isVerified ? "bg-blue-500 text-white" : "bg-default-300 text-default-700"}`}
+              disabled
+            >
+              {user?.isVerified ? (
+                <>
+                  <BsCheckCircle className="mr-2" /> Verified
+                </>
+              ) : (
+                "Not Verified"
+              )}
+            </Button>
+          </div>
         </div>
 
-        {/* Contribution & Package Info Card */}
-        <div className="mt-4 sm:mt-0 bg-default-100 p-4 rounded-lg">
-          <div className="text-default-600">
-            Contributions: <strong>{user.posts}</strong> posts
+        {/* Contributions & Package Info Card */}
+        <div className="bg-default-100 p-6 rounded-lg shadow-lg mt-4">
+          <div>
+            <span className="text-default-600">Contributions: {user?.postsCount} posts</span>
           </div>
-          <div className="mt-2 text-default-600">
-            Package: <strong>{user.package.name}</strong>
+          <div className="mt-2">
+            <span className="text-default-600">Package: <strong>{user?.package?.name}</strong></span>
           </div>
-          <div className="text-sm text-degault-500">
-            Issued: {user.package.issuedDate} | Expiry: {user.package.expiryDate}
+          <div className="text-sm text-default-500">
+            Issued: {user.package.issuedDate} | Expiry: {user?.package?.expiryDate}
           </div>
         </div>
       </div>
 
-      {/* Users You May Know Section */}
-      <div className="mt-10">
-        {/* Add Post Button */}
-        <div className="mb-4">
-          <Button
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600"
-          >
+      {/* Right Side - People You May Know Section */}
+      <div className="mt-10 sm:ml-6 sm:w-1/3">
+        {/* Centered Add Post Button */}
+        <div className="mx-auto mb-6 flex justify-center">
+          <Button className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600">
             Add Post
           </Button>
         </div>
 
-        {/* List of People You May Follow */}
-        <h3 className="text-2xl font-bold">People You May Know</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
+        {/* People You May Know Section */}
+        <h3 className="text-2xl font-bold mb-4">People You May Follow</h3>
+        <div className="grid grid-cols-1 gap-6">
           {followStatus.map((user) => (
-            <div
-              key={user.id}
-              className="bg-default-100 p-6 rounded-lg shadow-lg flex items-center justify-between"
-            >
+            <div key={user.id} className="bg-default-100 p-6 rounded-lg shadow-lg flex items-center justify-between">
               {/* User Avatar */}
               <div className="flex items-center">
                 <Avatar
@@ -119,12 +128,16 @@ const UserProfilePage = () => {
                 </div>
               </div>
 
-              {/* Follow/Unfollow Icon */}
-              <div onClick={() => toggleFollow(user.id)} className="cursor-pointer">
+              {/* Follow/Unfollow with Icons */}
+              <div className="flex items-center">
                 {user.isFollowed ? (
-                  <BsPersonDash className="text-gray-700 w-6 h-6" />
+                  <Button onClick={() => toggleFollow(user.id)} className="bg-default-300 text-default-700 rounded-lg p-2 hover:shadow-lg">
+                    <BsPersonDash className="w-5 h-5" />
+                  </Button>
                 ) : (
-                  <BsPersonPlus className="text-blue-500 w-6 h-6" />
+                  <Button onClick={() => toggleFollow(user.id)} className="bg-blue-500 text-white rounded-lg p-2 hover:shadow-lg">
+                    <BsPersonPlus className="w-5 h-5" />
+                  </Button>
                 )}
               </div>
             </div>

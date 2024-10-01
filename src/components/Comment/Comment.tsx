@@ -12,10 +12,10 @@ export interface Comment {
 
 interface CommentSectionProps {
   postId: string;
-  
+  refetchPost: () => void;
 }
 
-const CommentSection: React.FC<CommentSectionProps> = ({ postId}) => {
+const CommentSection: React.FC<CommentSectionProps> = ({ postId ,refetchPost}) => {
   const [content, setContent] = useState<string>(''); 
   const { user } = useUser();
 
@@ -36,7 +36,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId}) => {
 
     handleComment(commentData, {
       onSuccess: (newComment) => {
-        
+        refetchPost();
         setContent('');
       },
     });
@@ -66,3 +66,4 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId}) => {
 };
 
 export default CommentSection;
+

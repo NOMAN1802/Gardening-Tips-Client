@@ -4,6 +4,12 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
+interface Package{
+ name: string;
+ expiryDate: Date,
+ issuedDate: Date,
+}
+
 export interface IUser {
   _id: string;
   name: string;
@@ -12,6 +18,10 @@ export interface IUser {
   status: string;
   mobileNumber: string;
   profilePhoto: string;
+  isVerified?:boolean;
+  upvoteCount?:number;
+  package?:Package;
+  postsCount:string;
   createdAt?: string;
   updatedAt?: string;
   __v?: number;
