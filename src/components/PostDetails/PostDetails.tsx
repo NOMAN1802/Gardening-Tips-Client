@@ -12,7 +12,7 @@ interface PostDetailsProps {
   post: TPost
 }
 
-const PostDetailsPage: React.FC<PostDetailsProps> = ({ post }) => {
+const PostDetails: React.FC<PostDetailsProps> = ({ post }) => {
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
   const [favorite, setFavorite] = useState(false);
@@ -52,6 +52,8 @@ const PostDetailsPage: React.FC<PostDetailsProps> = ({ post }) => {
     // Implement backend logic here to follow/unfollow the author
     // Example: POST /api/users/{authorId}/follow
   };
+
+  
 
   return (
 
@@ -161,14 +163,15 @@ const PostDetailsPage: React.FC<PostDetailsProps> = ({ post }) => {
            <CommentSection postId={post._id} />
     </div>
 
-    <div className='mt-4'>
+    <div className='mt-4 w-1/2 '>
         {post.comments && post.comments.length > 0 ? (
           post.comments.map((comment, index) => (
-            <div key={index} className='mb-4 card w-2/3 bg-default-100 p-4 space-y-2'>
+            <div key={index} className='mb-4 card w-2/3 bg-default-100 p-4 space-y-2 rounded-lg shadow-lg'>
               
-              <p className='flex gap-2  items-center'><FaRegUser/> <span>{comment.commentator?.name}</span></p>
+              <p className='flex gap-2  items-center'><FaRegUser/> <span>{comment?.commentator?.name}</span></p>
               
-
+              <div className='flex items-center justify-between'>
+                
               <p className='flex gap-2 items-center'><AiOutlineMessage /> <span>{comment?.content}</span></p>
               <button className='relative cursor-pointer'
             //   disabled={ !user}
@@ -176,6 +179,7 @@ const PostDetailsPage: React.FC<PostDetailsProps> = ({ post }) => {
               >
               <FaRegTrashAlt className='absolute right-3 bottom-1'/>
               </button>
+              </div>
             </div>
           ))
         ) : (
@@ -188,4 +192,5 @@ const PostDetailsPage: React.FC<PostDetailsProps> = ({ post }) => {
   );
 };
 
-export default PostDetailsPage;
+export default PostDetails;
+

@@ -10,6 +10,7 @@ export interface LinkItem {
   
   export const userLinks: LinkItem[] = [
     { name: 'Profile', path: '/profile' },
-    { name: 'My Orders', path: '/profile/my-posts' },
+    { name: 'My Posts', path: '/profile/my-posts' },
+    { name: 'Settings', path: '/profile/settings' },
   ];
   
