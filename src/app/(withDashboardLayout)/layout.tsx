@@ -1,5 +1,6 @@
 
 import Container from "@/src/components/Container/Container";
+import Sidebar from "@/src/components/modules/Dashboard";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -7,7 +8,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       <div className="flex flex-col md:flex-row w-full my-6 space-y-6 md:space-y-0 md:space-x-6">
         {/* Sidebar */}
         <div className="md:w-1/5 w-full">
-          Sidebar
+          <Sidebar/>
         </div>
 
         {/* Main Content */}
