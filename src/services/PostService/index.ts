@@ -28,7 +28,7 @@ export const createPost = async (formData: FormData): Promise<any> => {
       },
     });
 
-    // revalidateTag("posts");
+    revalidateTag("posts");
 
     if (data.success) {
       return data;
@@ -40,6 +40,18 @@ export const createPost = async (formData: FormData): Promise<any> => {
     throw new Error(error.response?.data?.message || error.message || "Failed to create post");
   }
 };
+
+
+export const getMyPosts = async (id: string): Promise<any> => {
+  try {
+    const { data } = await axiosInstance.get(`/user/${id}/posts`);
+    return data;
+  } catch (error: any) {
+    console.error("Error fetching user posts:", error);
+    throw new Error(error.response?.data?.message || error.message || "Failed to fetch user posts");
+  }
+};
+
 
 
 export const getAllPosts = async (type?: string, wait = false, category?: string) => {
@@ -74,6 +86,14 @@ export const getAllPosts = async (type?: string, wait = false, category?: string
 
   return res.json();
 };
+
+export const getMyPost = async(id: string)=>{
+  const res = await fetch(`${envConfig.baseApi}/user/${id}`,{
+    next:{
+      revalidate:['posts']
+    }
+  })
+}
 
 
 export const getPost = async( id:string) =>{

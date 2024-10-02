@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { createComment, createPost } from "../services/PostService";
+import { createComment, createPost, getMyPosts } from "../services/PostService";
 import { Comment } from "../components/Comment/Comment";
 
 
@@ -17,8 +17,13 @@ export const useCreatePost = () => {
   });
 };
 
-
-
+export const useGetMyPosts = (userId: string) => {
+  return useQuery({
+    queryKey: ["myPosts", userId],
+    queryFn: () => getMyPosts(userId),
+    enabled: !!userId,
+  });
+};
 
 export const useCreateComment = (postId: string) => {
     return useMutation<any, Error, Comment>({
