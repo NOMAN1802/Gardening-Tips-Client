@@ -5,7 +5,7 @@ import { revalidateTag } from "next/cache";
 
 export const createPost = async (formData: FormData): Promise<any> => {
   try {
-    const { data } = await axiosInstance.post("/items", formData, {
+    const { data } = await axiosInstance.post("/posts/create-post", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

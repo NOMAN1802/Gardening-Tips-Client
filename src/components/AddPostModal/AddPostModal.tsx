@@ -1,56 +1,102 @@
-import React, { useRef } from 'react';
+"use client"
+import React, { useState, ChangeEvent } from 'react';
 import { BsUpload } from "react-icons/bs";
 import dynamic from 'next/dynamic';
-import { useForm, Controller } from "react-hook-form";
+import { useForm, FormProvider, SubmitHandler, FieldValues, Controller } from "react-hook-form";
 import { Modal, ModalContent, ModalHeader, ModalBody, useDisclosure } from "@nextui-org/modal";
 import { Input } from "@nextui-org/input";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Button } from '@nextui-org/button';
+import { useCreatePost } from '@/src/hooks/post.hook';
+import { useUser } from '@/src/context/user.provider';
+import { toast } from 'sonner';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 import 'react-quill/dist/quill.snow.css';
-import { useUser } from '@/src/context/user.provider';
-
-interface PostFormValues {
-  title: string;
-  postDetails: string;
-  category: string;
-  image: File | null;
-}
 
 interface AddPostModalProps {
   buttonText: string;
   title: string;
-  onSubmit: (postData: PostFormValues) => void;
   buttonVariant?: "light" | "solid" | "bordered" | "flat" | "faded" | "shadow" | "ghost" | undefined;
   buttonClassName?: string;
 }
-const user = useUser();
+
 const categoryOptions = ["Vegetables", "Flowers", "Landscaping", "Herb", "Indoor", "Fruits"];
 
 const AddPostModal: React.FC<AddPostModalProps> = ({
   buttonText,
   title,
-  onSubmit,
   buttonVariant = "light",
   buttonClassName,
 }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
-  const { control, handleSubmit, register, formState: { errors }, reset } = useForm<PostFormValues>({
-    defaultValues: {
-      title: "",
-      postDetails: "",
-      category: "",
-      image: null,
+  const methods = useForm();
+  const { user } = useUser();
+  const { mutate: createPost, isLoading } = useCreatePost();
+
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      const newImageFiles = Array.from(files);
+      setImageFiles((prev) => [...prev, ...newImageFiles]);
+
+      newImageFiles.forEach((file) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreviews((prev) => [...prev, reader.result as string]);
+        };
+        reader.readAsDataURL(file);
+      });
     }
-  });
+  };
 
-  const onSubmitForm = (data: PostFormValues) => {
-    onSubmit(data);
-    reset();
-    onOpenChange();
+  const onSubmitForm: SubmitHandler<FieldValues> = (data) => {
+    if (!user) {
+      toast.error("You must be logged in to create a post");
+      return;
+    }
+
+    const formData = new FormData();
+
+    const postData = {
+      ...data,
+      author: user._id
+    };
+
+    formData.append('data', JSON.stringify(postData));
+
+    imageFiles.forEach((file, index) => {
+      formData.append(`image${index}`, file);
+    });
+
+    createPost(formData, {
+      onSuccess: () => {
+        toast.success('Post added successfully')
+        methods.reset();
+        setImageFiles([]);
+        setImagePreviews([]);
+        onOpenChange();
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      }
+    });
+  };
+
+  const handleOpenChange = () => {
+    if (isOpen) {
+      // Modal is about to close
+      const confirmClose = window.confirm("Are you sure you want to close this form? All unsaved changes will be lost.");
+      if (confirmClose) {
+        onOpenChange();
+      }
+    } else {
+      // Modal is about to open
+      onOpenChange();
+    }
   };
 
   return (
@@ -64,8 +110,10 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
       </Button>
       <Modal 
         isOpen={isOpen} 
-        onOpenChange={onOpenChange}
-        className="max-w-lg mx-auto"
+        onOpenChange={handleOpenChange}
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        className="max-w-3xl mx-auto"
       >
         <ModalContent>
           {(onClose) => (
@@ -74,39 +122,35 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
                 <h3 className="text-xl font-bold">{title}</h3>
               </ModalHeader>
               <ModalBody>
-                <form onSubmit={handleSubmit(onSubmitForm)} className="space-y-4">
-                  <div>
+                <FormProvider {...methods}>
+                  <form onSubmit={methods.handleSubmit(onSubmitForm)} className="space-y-4">
                     <Input
-                      {...register("title", { required: "Title is required" })}
+                      {...methods.register("title", { required: "Title is required" })}
                       label="Title"
                       placeholder="Enter post title"
                       className="w-full"
                     />
-                    {errors.title && <p className="text-red-500">{errors.title.message}</p>}
-                  </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Post Details</label>
-                    <Controller
-                      name="postDetails"
-                      control={control}
-                      rules={{ required: "Post details are required" }}
-                      render={({ field }) => (
-                        <ReactQuill 
-                          theme="snow" 
-                          value={field.value} 
-                          onChange={field.onChange}
-                          className="h-64 mb-12"
-                        />
-                      )}
-                    />
-                    {errors.postDetails && <p className="text-red-500">{errors.postDetails.message}</p>}
-                  </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Post Details</label>
+                      <Controller
+                        name="postDetails"
+                        control={methods.control}
+                        rules={{ required: "Post details are required" }}
+                        render={({ field }) => (
+                          <ReactQuill 
+                            theme="snow" 
+                            value={field.value}
+                            onChange={field.onChange}
+                            className="h-64 mb-12"
+                          />
+                        )}
+                      />
+                    </div>
 
-                  <div>
                     <Controller
                       name="category"
-                      control={control}
+                      control={methods.control}
                       rules={{ required: "Category is required" }}
                       render={({ field }) => (
                         <Select
@@ -123,38 +167,48 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
                         </Select>
                       )}
                     />
-                    {errors.category && <p className="text-red-500">{errors.category.message}</p>}
-                  </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Upload Image</label>
-                    <div className="flex items-center">
+                    <div>
                       <label className="cursor-pointer bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">
                         <BsUpload className="inline-block mr-2" />
                         Choose File
                         <input
                           type="file"
                           className="hidden"
-                          {...register("image")}
+                          onChange={handleImageChange}
                           accept="image/*"
-                          ref={fileInputRef}
+                          multiple
                         />
                       </label>
-                      {fileInputRef.current?.files?.[0] && (
-                        <span className="ml-3 text-sm text-gray-500">{fileInputRef.current.files[0].name}</span>
-                      )}
                     </div>
-                  </div>
 
-                  <div className="flex justify-end space-x-2 mt-4">
-                    <Button color="danger" variant="light" onPress={onClose}>
-                      Cancel
-                    </Button>
-                    <Button color="primary" type="submit">
-                      Create Post
-                    </Button>
-                  </div>
-                </form>
+                    {imagePreviews.length > 0 && (
+                      <div className="flex gap-5 my-5 flex-wrap">
+                        {imagePreviews.map((imageDataUrl, index) => (
+                          <div
+                            key={index}
+                            className="relative size-48 rounded-xl border-2 border-dashed border-default-300 p-2"
+                          >
+                            <img
+                              alt="item"
+                              className="h-full w-full object-cover object-center rounded-md"
+                              src={imageDataUrl}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="flex justify-end space-x-2 mt-4">
+                      <Button color="danger" variant="light" onPress={() => handleOpenChange()}>
+                        Cancel
+                      </Button>
+                      <Button color="primary" type="submit" isLoading={isLoading}>
+                        Create Post
+                      </Button>
+                    </div>
+                  </form>
+                </FormProvider>
               </ModalBody>
             </>
           )}
