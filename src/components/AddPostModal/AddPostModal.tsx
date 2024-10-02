@@ -1,5 +1,6 @@
+// AddPostModal.tsx
 "use client"
-import React, { useState, ChangeEvent } from 'react';
+import React from 'react';
 import { BsUpload } from "react-icons/bs";
 import dynamic from 'next/dynamic';
 import { useForm, FormProvider, SubmitHandler, FieldValues, Controller } from "react-hook-form";
@@ -7,11 +8,13 @@ import { Modal, ModalContent, ModalHeader, ModalBody, useDisclosure } from "@nex
 import { Input } from "@nextui-org/input";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Button } from '@nextui-org/button';
-import { useCreatePost } from '@/src/hooks/post.hook';
-import { useUser } from '@/src/context/user.provider';
-import { toast } from 'sonner';
 
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+import DOMPurify from 'dompurify';
+
+const ReactQuill = dynamic(() => import('react-quill'), { 
+  ssr: false,
+  loading: () => <p>Loading editor...</p>
+});
 import 'react-quill/dist/quill.snow.css';
 
 interface AddPostModalProps {
@@ -19,6 +22,10 @@ interface AddPostModalProps {
   title: string;
   buttonVariant?: "light" | "solid" | "bordered" | "flat" | "faded" | "shadow" | "ghost" | undefined;
   buttonClassName?: string;
+  onSubmit: (data: FieldValues, resetForm: () => void, closeModal: () => void) => void;
+  handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  imagePreviews: string[];
+  isLoading: boolean;
 }
 
 const categoryOptions = ["Vegetables", "Flowers", "Landscaping", "Herb", "Indoor", "Fruits"];
@@ -28,73 +35,29 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
   title,
   buttonVariant = "light",
   buttonClassName,
+  onSubmit,
+  handleImageChange,
+  imagePreviews,
+  isLoading,
 }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-
   const methods = useForm();
-  const { user } = useUser();
-  const { mutate: createPost, isLoading } = useCreatePost();
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      const newImageFiles = Array.from(files);
-      setImageFiles((prev) => [...prev, ...newImageFiles]);
-
-      newImageFiles.forEach((file) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImagePreviews((prev) => [...prev, reader.result as string]);
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-  };
-
-  const onSubmitForm: SubmitHandler<FieldValues> = (data) => {
-    if (!user) {
-      toast.error("You must be logged in to create a post");
-      return;
-    }
-
-    const formData = new FormData();
-
-    const postData = {
+  const handleSubmit: SubmitHandler<FieldValues> = (data) => {
+    const sanitizedData = {
       ...data,
-      author: user._id
+      postDetails: DOMPurify.sanitize(data.postDetails)
     };
-
-    formData.append('data', JSON.stringify(postData));
-
-    imageFiles.forEach((file, index) => {
-      formData.append(`image${index}`, file);
-    });
-
-    createPost(formData, {
-      onSuccess: () => {
-        toast.success('Post added successfully')
-        methods.reset();
-        setImageFiles([]);
-        setImagePreviews([]);
-        onOpenChange();
-      },
-      onError: (error) => {
-        toast.error(error.message);
-      }
-    });
+    onSubmit(sanitizedData, methods.reset, () => onOpenChange());
   };
 
   const handleOpenChange = () => {
     if (isOpen) {
-      // Modal is about to close
       const confirmClose = window.confirm("Are you sure you want to close this form? All unsaved changes will be lost.");
       if (confirmClose) {
         onOpenChange();
       }
     } else {
-      // Modal is about to open
       onOpenChange();
     }
   };
@@ -123,7 +86,7 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
               </ModalHeader>
               <ModalBody>
                 <FormProvider {...methods}>
-                  <form onSubmit={methods.handleSubmit(onSubmitForm)} className="space-y-4">
+                  <form onSubmit={methods.handleSubmit(handleSubmit)} className="space-y-4">
                     <Input
                       {...methods.register("title", { required: "Title is required" })}
                       label="Title"
@@ -140,8 +103,9 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
                         render={({ field }) => (
                           <ReactQuill 
                             theme="snow" 
-                            value={field.value}
-                            onChange={field.onChange}
+                            value={field.value || ''}
+                            onChange={(content) => field.onChange(DOMPurify.sanitize(content))}
+                            onBlur={field.onBlur}
                             className="h-64 mb-12"
                           />
                         )}
@@ -178,6 +142,7 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
                           onChange={handleImageChange}
                           accept="image/*"
                           multiple
+                          name="image"
                         />
                       </label>
                     </div>
@@ -200,11 +165,13 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
                     )}
 
                     <div className="flex justify-end space-x-2 mt-4">
-                      <Button color="danger" variant="light" onPress={() => handleOpenChange()}>
-                        Cancel
-                      </Button>
-                      <Button color="primary" type="submit" isLoading={isLoading}>
-                        Create Post
+                      <Button 
+                        color="primary" 
+                        type="submit" 
+                        isLoading={isLoading}
+                        disabled={isLoading}
+                      >
+                        {isLoading ? 'Creating Post...' : 'Create Post'}
                       </Button>
                     </div>
                   </form>
