@@ -1,12 +1,14 @@
 "use client";
 import Image from 'next/image';
 import { useState } from 'react';
-import { toast } from 'sonner'; // Import sonner toast
+import { toast } from 'sonner'; 
 import { FaThumbsUp, FaThumbsDown, FaHeart, FaRegHeart, FaUserPlus, FaUserMinus, FaRegUser, FaRegTrashAlt } from 'react-icons/fa';
 import { TPost } from '@/src/types';
 import PageTitle from '../PageTitle/PageTitle';
 import CommentSection from '../Comment/Comment';
 import { AiOutlineMessage } from 'react-icons/ai';
+import DOMPurify from 'dompurify';
+
 interface PostDetailsProps {
   post: TPost; 
   refetchPost: () => void;
@@ -54,7 +56,7 @@ const [upvoted, setUpvoted] = useState(false);
     // Example: POST /api/users/{authorId}/follow
   };
 
-  
+  const sanitizedPostDetails = DOMPurify.sanitize(post.postDetails);
 
   return (
 
@@ -119,7 +121,8 @@ const [upvoted, setUpvoted] = useState(false);
         <div className="w-full lg:w-2/5 lg:pl-6 space-y-10">
           <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
           <h2 className="text-2xl font-semibold mb-4">{post.category}</h2>
-          <p className="text-lg text-gray-700 mb-6">{post.postDetails}</p>
+          <p className="text-lg text-gray-700 mb-6" dangerouslySetInnerHTML={{ __html: sanitizedPostDetails }}></p>
+
 
           {/* Author Info */}
           <div className="flex items-center space-x-4 mb-6">
@@ -194,4 +197,3 @@ const [upvoted, setUpvoted] = useState(false);
 };
 
 export default PostDetails;
-

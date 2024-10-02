@@ -1,4 +1,3 @@
-// MyPostsPage.tsx
 "use client"
 import React, { useState, ChangeEvent } from 'react'
 import AddPostModal from "@/src/components/AddPostModal/AddPostModal";
@@ -12,7 +11,6 @@ const MyPostsPage = () => {
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const { user } = useUser();
   const { mutate: createPost, isPending} = useCreatePost();
-
 
 
   const onSubmitForm = (data: FieldValues, resetForm: () => void, closeModal: () => void) => {
@@ -34,9 +32,19 @@ const MyPostsPage = () => {
       formData.append("postImages", image);
     }
   
-    createPost(formData);
-  }; // Close bracket for onSubmitForm here
-  
+    createPost(formData, {
+      onSuccess: () => {
+        resetForm();
+        closeModal();
+        setImageFiles([]);
+        setImagePreviews([]);
+      },
+      onError: (error) => {
+        console.error("Error creating post:", error);
+      }
+    });
+  };
+
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files![0];
   
@@ -52,6 +60,9 @@ const MyPostsPage = () => {
       reader.readAsDataURL(file);
     }
   }; // Close bracket for handleImageChange here
+
+
+
 
   return (
     <div>

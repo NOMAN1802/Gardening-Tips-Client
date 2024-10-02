@@ -96,20 +96,22 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Post Details</label>
-                      <Controller
-                        name="postDetails"
-                        control={methods.control}
-                        rules={{ required: "Post details are required" }}
-                        render={({ field }) => (
-                          <ReactQuill 
-                            theme="snow" 
-                            value={field.value || ''}
-                            onChange={(content) => field.onChange(DOMPurify.sanitize(content))}
-                            onBlur={field.onBlur}
-                            className="h-64 mb-12"
-                          />
-                        )}
-                      />
+                 
+
+                <Controller
+                name="postDetails"
+                control={methods.control}
+               rules={{ required: "Post details are required" }}
+               render={({ field }) => (
+              <ReactQuill 
+               theme="snow" 
+              value={field.value || ''}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              className="h-64 mb-12"
+             />
+             )}
+              />
                     </div>
 
                     <Controller

@@ -1,7 +1,24 @@
 import envConfig from "@/src/config/envConfig";
 import { delay } from "@/src/utils/delay";
 import axiosInstance from "@/src/lib/AxiosInstance";
-import { revalidateTag } from "next/cache";
+// import { revalidateTag } from "next/cache";
+
+// export const createPost = async (formData: FormData): Promise<any> => {
+//   try {
+//     const { data } = await axiosInstance.post("/posts/create-post", formData, {
+//       headers: {
+//         "Content-Type": "multipart/form-data",
+//       },
+//     });
+
+//     revalidateTag("posts");
+
+//     return data;
+//   } catch (error) {
+//     console.log(error);
+//     throw new Error("Failed to create post");
+//   }
+// };
 
 export const createPost = async (formData: FormData): Promise<any> => {
   try {
@@ -11,12 +28,16 @@ export const createPost = async (formData: FormData): Promise<any> => {
       },
     });
 
-    revalidateTag("posts");
+    // revalidateTag("posts");
 
-    return data;
-  } catch (error) {
-    console.log(error);
-    throw new Error("Failed to create post");
+    if (data.success) {
+      return data;
+    } else {
+      throw new Error(data.message || "Failed to create post");
+    }
+  } catch (error: any) {
+    console.error("Error creating post:", error);
+    throw new Error(error.response?.data?.message || error.message || "Failed to create post");
   }
 };
 
@@ -25,6 +46,7 @@ export const getAllPosts = async (type?: string, wait = false, category?: string
   let fetchOptions: RequestInit = {
     method: "GET",
     cache: "no-store",
+    
   };
 
   if (type === "isr") {
