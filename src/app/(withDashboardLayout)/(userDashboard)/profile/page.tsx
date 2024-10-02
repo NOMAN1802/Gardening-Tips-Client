@@ -6,10 +6,10 @@ import { Avatar } from "@nextui-org/avatar";
 import { BsCheckCircle, BsArrowUpCircle, BsPersonPlus, BsPersonDash } from "react-icons/bs";
 import { useState } from "react";
 import { useUser } from "@/src/context/user.provider";
-import AddPostModal from "@/src/components/AddPostModal/AddPostModal";
+
 
 const UserProfilePage = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+ 
   
   // Mock user data
   const user = {
@@ -38,15 +38,7 @@ const UserProfilePage = () => {
     );
   };
 
-  const handleSubmitPost = (postData: any) => {
-    // Here you would typically send the post data to your backend
-    console.log(postData);
-    // Implement your post submission logic here
-    setIsModalOpen(false);  // Close the modal after submission
-  };
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+ 
 
   return (
     <div className="flex flex-col sm:flex-row">
@@ -99,19 +91,9 @@ const UserProfilePage = () => {
 
       {/* Right Side - People You May Know Section */}
       <div className="mt-10 sm:ml-6 sm:w-1/3">
-        {/* Centered Add Post Button */}
-        <div className="mx-auto mb-6 flex justify-center">
-          <Button onClick={openModal} className="bg-blue-500 text-white px-4 py-4 rounded-lg shadow-md hover:bg-blue-600">
-            Add Post
-          </Button>
-        </div>
+      
 
-          {/* Add Post Modal */}
-      <AddPostModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        onSubmit={handleSubmitPost}
-      />
+     
 
         {/* People You May Know Section */}
         <h3 className="text-2xl font-bold mb-4">People You May Follow</h3>
@@ -148,12 +130,8 @@ const UserProfilePage = () => {
         </div>
       </div>
 
-      Add Post Modal
-      <AddPostModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        onSubmit={handleSubmitPost}
-      />
+      
+      
     </div>
   );
 };
