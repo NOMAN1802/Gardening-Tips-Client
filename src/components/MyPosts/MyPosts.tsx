@@ -44,6 +44,7 @@ import { Chip } from "@nextui-org/chip";
 import { Tooltip } from "@nextui-org/tooltip";
 import { Button } from "@nextui-org/button";
 import { FaEdit, FaTrash, FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
+import Loading from '../Loading/Loading';
 
 const MyPosts = () => {
   const { user } = useUser();
@@ -62,7 +63,7 @@ const MyPosts = () => {
   return (
     <div className="w-full overflow-x-auto">
       {isLoadingPosts ? (
-        <p className="text-center py-4">Loading posts...</p>
+        <Loading/>
       ) : myPosts?.data?.length ? (
         <Table aria-label="My Posts" className="min-w-full">
           <TableHeader>
@@ -83,8 +84,8 @@ const MyPosts = () => {
                 <TableCell>
                   <div className="flex flex-col">
                     <span className="font-semibold">{post.title}</span>
-                    <span className="text-sm text-gray-500 md:hidden">{post.category}</span>
-                    <span className="text-xs text-gray-400 md:hidden">{new Date(post.createdAt).toLocaleDateString()}</span>
+                    <span className="text-sm text-default-500 md:hidden">{post.category}</span>
+                    <span className="text-xs text-default-400 md:hidden">{new Date(post.createdAt).toLocaleDateString()}</span>
                   </div>
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
@@ -98,7 +99,7 @@ const MyPosts = () => {
                 <TableCell className="hidden md:table-cell">
                   <div className="flex items-center space-x-2">
                     <div className="flex items-center">
-                      <FaThumbsUp className="mr-1 text-blue-500" />
+                      <FaThumbsUp className="mr-1 text-default-500" />
                       <span>{post.upVotes}</span>
                     </div>
                     <div className="flex items-center">
@@ -114,7 +115,7 @@ const MyPosts = () => {
                   <div className="flex space-x-2">
                     <Tooltip content="Edit post">
                       <Button isIconOnly size="sm" variant="light" onPress={() => handleUpdate(post._id)}>
-                        <FaEdit className="text-blue-500" />
+                        <FaEdit className="text-default-500" />
                       </Button>
                     </Tooltip>
                     <Tooltip content="Delete post">

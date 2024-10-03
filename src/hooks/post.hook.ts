@@ -3,16 +3,45 @@ import { toast } from "sonner";
 import { createComment, createPost, getMyPosts } from "../services/PostService";
 import { Comment } from "../components/Comment/Comment";
 
+// export const useCreatePost = () => {
+//   return useMutation<any, Error, FormData>({
+//     mutationKey: ["CREATE_POST"],
+//     mutationFn: async (postData) => await createPost(postData),
+//     onSuccess: () => {
+//       toast.success("Post created successfully");
+//     },
+//     onError: (error) => {
+//       toast.error(error.message);
+//     },
+//   });
+// };
 
 export const useCreatePost = () => {
+  const queryClient = useQueryClient();
   return useMutation<any, Error, FormData>({
     mutationKey: ["CREATE_POST"],
     mutationFn: async (postData) => await createPost(postData),
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success("Post created successfully");
+      queryClient.invalidateQueries({ queryKey: ["myPosts"] });
     },
     onError: (error) => {
       toast.error(error.message);
+    },
+  });
+};
+
+
+export const useUpdatePost = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, { id: string; formData: FormData }>({
+    mutationFn: ({ id, formData }) => updatePost(id, formData),
+    onSuccess: (data, variables) => {
+      toast.success("Post updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["myPosts"] });
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to update post");
     },
   });
 };
@@ -39,27 +68,6 @@ export const useCreateComment = (postId: string) => {
   };
 
 
-
-// export const useCreateComment = (postId: string) => {
-//   const queryClient = useQueryClient();
-
-//   return useMutation<any, Error, Comment>({
-//     mutationKey: ["CREATE_COMMENT", postId],
-//     mutationFn: async (commentData) => await createComment(postId, commentData),
-//     onSuccess: (newComment) => {
-//       toast.success("Comment created successfully...");
-//       queryClient.setQueryData(["post", postId], (oldData: any) => {
-//         return {
-//           ...oldData,
-//           comments: [...(oldData.comments || []), newComment],
-//         };
-//       });
-//     },
-//     onError: (error) => {
-//       toast.error(error.message || "Failed to create comment...");
-//     },
-//   });
-// };
   
 
   

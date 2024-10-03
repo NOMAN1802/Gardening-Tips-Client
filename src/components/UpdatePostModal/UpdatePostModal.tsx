@@ -34,7 +34,7 @@ interface AddPostModalProps {
 
 const categoryOptions = ["Vegetables", "Flowers", "Landscaping", "Herb", "Indoor", "Fruits"];
 
-const AddPostModal: React.FC<AddPostModalProps> = ({
+const UpdatePostModal: React.FC<AddPostModalProps> = ({
   buttonText,
   title,
   buttonVariant = "light",
@@ -157,7 +157,7 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
                         )}
                       />
                     </div>
-                      <label className="cursor-pointer bg-default-500 text-white py-2 px-4 rounded-md hover:bg-default-600 transition duration-300">
+                      <label className="cursor-pointer bg-default-500  py-2 px-4 rounded-md hover:bg-default-600 transition duration-300">
                         <BsUpload className="inline-block mr-2" />
                         Choose File
                         <input
@@ -209,4 +209,4 @@ const AddPostModal: React.FC<AddPostModalProps> = ({
   );
 };
 
-export default AddPostModal;
+export default UpdatePostModal;
