@@ -4,11 +4,11 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
-interface Package{
- name: string;
- expiryDate: Date,
- issuedDate: Date,
-}
+// interface Package{
+//  name: string;
+//  expiryDate: Date,
+//  issuedDate: Date,
+// }
 
 export interface IUser {
   _id: string;
@@ -20,8 +20,10 @@ export interface IUser {
   profilePhoto: string;
   isVerified?:boolean;
   upvoteCount?:number;
-  package?:Package;
-  postsCount:string;
+  isFollowed? : boolean;
+  followers?:IUser[];
+  following?:IUser[];
+  postsCount?:string;
   createdAt?: string;
   updatedAt?: string;
   __v?: number;
