@@ -16,6 +16,7 @@ const UserProfilePage = () => {
   const { user } = useUser();
   const { data: usersData, isLoading } = useGetUsers();
   const router = useRouter();
+  console.log(user)
   
   const [followStatus, setFollowStatus] = useState<{ [key: string]: boolean }>({});
   const [isVerifying, setIsVerifying] = useState(false);
@@ -24,7 +25,7 @@ const UserProfilePage = () => {
     setFollowStatus(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const handleVerify = async () => {
+  const handleUserVerify = async () => {
     if (user && !user.isVerified) {
       setIsVerifying(true);
       try {
@@ -93,7 +94,7 @@ const UserProfilePage = () => {
                     ? "bg-blue-500 text-white" 
                     : "bg-default-300 text-default-700 hover:bg-blue-400 hover:text-white"
                 }`}
-                onClick={handleVerify}
+                onClick={handleUserVerify}
                 disabled={user.isVerified || isVerifying}
               >
                 {user.isVerified ? (
@@ -152,3 +153,5 @@ const UserProfilePage = () => {
 };
 
 export default UserProfilePage;
+
+

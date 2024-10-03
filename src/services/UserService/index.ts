@@ -12,22 +12,7 @@ export const getAllUsers = async () => {
   }
 };
 
-// export const verifyUser = async (userId: string): Promise<{ success: boolean; payment_url?: string; error?: string }> => {
-//   try {
-//     const { data } = await axiosInstance.post(`/users/verify/${userId}`);
-//     if (data.statusCode === 200 && data.data.payment_url) {
-//       return { success: true, payment_url: data.data.payment_url };
-//     } else {
-//       throw new Error("Invalid response from server");
-//     }
-//   } catch (error: any) {
-//     console.error("Verification failed:", error);
-//     return { 
-//       success: false, 
-//       error: error.response?.data?.message || error.message || "Verification failed. Please try again." 
-//     };
-//   }
-// };
+
 
 export const verifyUser = async (userId: string): Promise<{ success: boolean; payment_url?: string; error?: string }> => {
   try {
@@ -55,3 +40,39 @@ export const verifyUser = async (userId: string): Promise<{ success: boolean; pa
     };
   }
 };
+
+
+
+type VoteType = "upvote" | "downvote";
+
+export const votePost = async (postId: string, voteType: VoteType, userId: string) => {
+  try {
+    const { data } = await axiosInstance.post(`/posts/${postId}/vote`, { voteType, userId });
+    return data;
+  } catch (error: any) {
+    console.error("Error voting:", error);
+    throw new Error(error.response?.data?.message || error.message || "Failed to vote");
+  }
+};
+
+export const favoritePost = async (postId: string, userId: string) => {
+  try {
+    const { data } = await axiosInstance.post(`/posts/${postId}/favorite`, { userId });
+    return data;
+  } catch (error: any) {
+    console.error("Error favoriting post:", error);
+    throw new Error(error.response?.data?.message || error.message || "Failed to favorite post");
+  }
+};
+
+export const followUser = async (authorId: string, userId: string) => {
+  try {
+    const { data } = await axiosInstance.post(`/users/${authorId}/follow`, { userId });
+    return data;
+  } catch (error: any) {
+    console.error("Error following user:", error);
+    throw new Error(error.response?.data?.message || error.message || "Failed to follow user");
+  }
+};
+
+// Add other existing functions from your PostService here (createPost, updatePost, deletePost, etc.)
