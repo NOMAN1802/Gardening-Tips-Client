@@ -1,6 +1,7 @@
 import envConfig from "@/src/config/envConfig";
 import { delay } from "@/src/utils/delay";
 import axiosInstance from "@/src/lib/AxiosInstance";
+import { revalidateTag } from "next/cache";
 // import { revalidateTag } from "next/cache";
 
 // export const createPost = async (formData: FormData): Promise<any> => {
@@ -44,7 +45,7 @@ export const createPost = async (formData: FormData): Promise<any> => {
 
 export const getMyPosts = async (id: string): Promise<any> => {
   try {
-    const { data } = await axiosInstance.get(`/user/${id}/posts`);
+    const { data } = await axiosInstance.get(`posts/user/${id}`);
     return data;
   } catch (error: any) {
     console.error("Error fetching user posts:", error);

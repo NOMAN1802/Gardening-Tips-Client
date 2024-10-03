@@ -91,19 +91,20 @@
 "use client"
 import React, { useState, ChangeEvent } from 'react'
 import AddPostModal from "@/src/components/AddPostModal/AddPostModal";
-import { useCreatePost, useGetMyPosts } from '@/src/hooks/post.hook';
+import { useCreatePost } from '@/src/hooks/post.hook';
 import { useUser } from '@/src/context/user.provider';
 import { toast } from 'sonner';
 import { FieldValues } from "react-hook-form";
 import PageTitle from '@/src/components/PageTitle/PageTitle';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/table";
+import MyPosts from '@/src/components/MyPosts/MyPosts';
+
 
 const MyPostsPage = () => {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const { user } = useUser();
   const { mutate: createPost, isPending } = useCreatePost();
-  const { data: myPosts, isLoading: isLoadingPosts } = useGetMyPosts(user?._id || "");
+
 
   const onSubmitForm = (data: FieldValues, resetForm: () => void, closeModal: () => void) => {
     if (!user) {
@@ -166,29 +167,8 @@ const MyPostsPage = () => {
         imagePreviews={imagePreviews}
         isLoading={isPending}
       />
-      
-      {isLoadingPosts ? (
-        <p>Loading posts...</p>
-      ) : (
-        <Table aria-label="My Posts">
-          <TableHeader>
-            <TableColumn>TITLE</TableColumn>
-            <TableColumn>CATEGORY</TableColumn>
-            <TableColumn>DETAILS</TableColumn>
-            <TableColumn>CREATED AT</TableColumn>
-          </TableHeader>
-          <TableBody>
-            {myPosts?.map((post: any) => (
-              <TableRow key={post._id}>
-                <TableCell>{post.title}</TableCell>
-                <TableCell>{post.category}</TableCell>
-                <TableCell>{post.postDetails.substring(0, 50)}...</TableCell>
-                <TableCell>{new Date(post.createdAt).toLocaleDateString()}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
+      <MyPosts/>
+    
     </div>
   )
 }
