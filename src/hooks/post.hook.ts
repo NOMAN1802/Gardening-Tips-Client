@@ -1,20 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { createComment, createPost, getMyPosts } from "../services/PostService";
+import { createComment, createPost, deletePost, getMyPosts, updatePost } from "../services/PostService";
 import { Comment } from "../components/Comment/Comment";
 
-// export const useCreatePost = () => {
-//   return useMutation<any, Error, FormData>({
-//     mutationKey: ["CREATE_POST"],
-//     mutationFn: async (postData) => await createPost(postData),
-//     onSuccess: () => {
-//       toast.success("Post created successfully");
-//     },
-//     onError: (error) => {
-//       toast.error(error.message);
-//     },
-//   });
-// };
 
 export const useCreatePost = () => {
   const queryClient = useQueryClient();
@@ -42,6 +30,23 @@ export const useUpdatePost = () => {
     },
     onError: (error) => {
       toast.error(error.message || "Failed to update post");
+    },
+  });
+};
+
+export const useDeletePost = () => {
+  const queryClient = useQueryClient();
+  return useMutation<any, Error, string>({
+    mutationFn: async (postId: string) => {
+      const response = await deletePost(postId);
+      return response;
+    },
+    onSuccess: () => {
+      toast.success("Post deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["myPosts"] });
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to delete post");
     },
   });
 };
