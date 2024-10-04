@@ -43,9 +43,7 @@ export const verifyUser = async (userId: string): Promise<{ success: boolean; pa
 
 
 
-type VoteType = "upvote" | "downvote";
-
-export const votePost = async (postId: string, voteType: VoteType, userId: string) => {
+export const votePost = async (postId: string, voteType: "upvote" | "downvote", userId: string) => {
   try {
     const { data } = await axiosInstance.post(`/posts/${postId}/vote`, { voteType, userId });
     return data;
@@ -57,7 +55,7 @@ export const votePost = async (postId: string, voteType: VoteType, userId: strin
 
 export const favoritePost = async (postId: string, userId: string) => {
   try {
-    const { data } = await axiosInstance.post(`/posts/${postId}/favorite`, { userId });
+    const { data } = await axiosInstance.post(`/users/favorite/${postId}`, { userId });
     return data;
   } catch (error: any) {
     console.error("Error favoriting post:", error);
@@ -67,7 +65,7 @@ export const favoritePost = async (postId: string, userId: string) => {
 
 export const followUser = async (authorId: string, userId: string) => {
   try {
-    const { data } = await axiosInstance.post(`/users/${authorId}/follow`, { userId });
+    const { data } = await axiosInstance.post(`/users/follow/${authorId}`, { userId });
     return data;
   } catch (error: any) {
     console.error("Error following user:", error);
@@ -75,4 +73,24 @@ export const followUser = async (authorId: string, userId: string) => {
   }
 };
 
-// Add other existing functions from your PostService here (createPost, updatePost, deletePost, etc.)
+export const getUserProfile = async (userId: string) => {
+  try {
+    const { data } = await axiosInstance.get(`/users/${userId}`);
+    return data;
+  } catch (error: any) {
+    console.error("Error fetching user profile:", error);
+    throw new Error(error.response?.data?.message || error.message || "Failed to fetch user profile");
+  }
+};
+
+export const updateUserProfile = async (userId: string, profileData: any) => {
+  try {
+    const { data } = await axiosInstance.put(`/users/${userId}`, profileData);
+    return data;
+  } catch (error: any) {
+    console.error("Error updating user profile:", error);
+    throw new Error(error.response?.data?.message || error.message || "Failed to update user profile");
+  }
+};
+
+
