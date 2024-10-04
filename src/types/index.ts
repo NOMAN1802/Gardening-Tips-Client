@@ -51,6 +51,7 @@ export interface TPost {
   author: Author;
   category: string;
   isPremium: boolean;
+  isFavorited?: string,
   images: string[];
   upVotes: number;
   downVotes: number;
@@ -62,7 +63,7 @@ export interface TPost {
   __v: number;
 }
 
-// Pagination Type
+
 export interface PostResponse {
   success: boolean;
   message: string;

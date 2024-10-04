@@ -63,15 +63,7 @@ export const favoritePost = async (postId: string, userId: string) => {
   }
 };
 
-export const followUser = async (authorId: string, userId: string) => {
-  try {
-    const { data } = await axiosInstance.post(`/users/follow/${authorId}`, { userId });
-    return data;
-  } catch (error: any) {
-    console.error("Error following user:", error);
-    throw new Error(error.response?.data?.message || error.message || "Failed to follow user");
-  }
-};
+
 
 export const getUserProfile = async (userId: string) => {
   try {
@@ -94,3 +86,25 @@ export const updateUserProfile = async (userId: string, profileData: any) => {
 };
 
 
+
+export const followUser = async (userId: string, currentUserId: string): Promise<any> => {
+  try {
+    const { data } = await axiosInstance.post(`users/follow/${userId}`, {
+      followerId: currentUserId
+    });
+    return data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || error.message || "Failed to follow user");
+  }
+};
+
+export const unfollowUser = async (userId: string, currentUserId: string): Promise<any> => {
+  try {
+    const { data } = await axiosInstance.post(`users/unfollow/${userId}`, {
+      followerId: currentUserId
+    });
+    return data;
+  } catch (error: any) { 
+    throw new Error(error.response?.data?.message || error.message || "Failed to unfollow user");
+  }
+};

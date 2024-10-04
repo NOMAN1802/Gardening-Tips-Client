@@ -14,6 +14,7 @@ import {
   const UserContext = createContext<IUserProviderValues | undefined>(undefined);
   
   interface IUserProviderValues {
+    [x: string]: any;
     user: IUser | null;
     isLoading: boolean;
     setUser: (user: IUser | null) => void;

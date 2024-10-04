@@ -3,9 +3,9 @@ import { Badge } from "@nextui-org/badge";
 import { Button } from "@nextui-org/button";
 import { Avatar } from "@nextui-org/avatar";
 import { BsCheckCircle, BsArrowUpCircle, BsPersonPlus, BsPersonDash } from "react-icons/bs";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { useUser } from "@/src/context/user.provider";
-import { useGetUsers } from "@/src/hooks/user.hook";
+import { useGetUsers, usePostActions } from "@/src/hooks/user.hook";
 import { IUser } from "@/src/types";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -13,33 +13,41 @@ import { verifyUser } from "@/src/services/UserService";
 
 const UserProfilePage = () => {
   const { user } = useUser();
-  const { data: usersData, isLoading } = useGetUsers();
+  const { data: usersData, isLoading, refetch } = useGetUsers();
+  const { handleFollow, handleUnfollow, isFollowing, isUnfollowing } = usePostActions();
   const router = useRouter();
-  
-  const [followStatus, setFollowStatus] = useState<{ [key: string]: boolean }>({});
-  const [isVerifying, setIsVerifying] = useState(false);
 
   const { currentUserData, otherUsers } = useMemo(() => {
     if (!usersData || !user) return { currentUserData: null, otherUsers: [] };
 
     const currentUser = usersData.data.find((u: IUser) => u._id === user._id);
-    const others = usersData.data
-      .filter((u: IUser) => u._id !== user._id)
-      .map(({ favoritePosts, following, followers, ...rest }: IUser) => rest);
+    const others = usersData.data.filter((u: IUser) => u._id !== user._id);
 
     return { currentUserData: currentUser, otherUsers: others };
   }, [usersData, user]);
 
-  const toggleFollow = (id: string) => {
-    setFollowStatus(prev => ({ ...prev, [id]: !prev[id] }));
+  const handleFollowAction = async (userToFollow: IUser) => {
+    try {
+      await handleFollow(userToFollow._id);
+      refetch();
+    } catch (error) {
+      console.error("Follow error:", error);
+    }
+  };
+
+  const handleUnfollowAction = async (userToUnfollow: IUser) => {
+    try {
+      await handleUnfollow(userToUnfollow._id);
+      refetch();
+    } catch (error) {
+      console.error("Unfollow error:", error);
+    }
   };
 
   const handleUserVerify = async () => {
     if (currentUserData && !currentUserData.isVerified) {
-      setIsVerifying(true);
       try {
         const result = await verifyUser(currentUserData._id);
-        console.log("Verification result:", result);
         if (result.success && result.payment_url) {
           window.location.href = result.payment_url;
         } else {
@@ -48,8 +56,6 @@ const UserProfilePage = () => {
       } catch (error) {
         console.error("Verification error:", error);
         toast.error("An error occurred during verification. Please try again.");
-      } finally {
-        setIsVerifying(false);
       }
     }
   };
@@ -106,14 +112,12 @@ const UserProfilePage = () => {
                     : "bg-default-300 text-default-700 hover:bg-blue-400 hover:text-white"
                 }`}
                 onClick={handleUserVerify}
-                disabled={currentUserData.isVerified || isVerifying}
+                disabled={currentUserData.isVerified}
               >
                 {currentUserData.isVerified ? (
                   <>
                     <BsCheckCircle className="mr-2" /> Verified
                   </>
-                ) : isVerifying ? (
-                  "Verifying..."
                 ) : (
                   "Verify Now"
                 )}
@@ -121,13 +125,36 @@ const UserProfilePage = () => {
             </div>
           </div>
         </div>
+
+        {/* Followers Section */}
+        <div className="mt-6">
+          <h3 className="text-2xl font-bold mb-4">Your Following</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {currentUserData.following?.map((followingId: string) => {
+              const followingUser = otherUsers.find((u: IUser) => u._id === followingId);
+              return followingUser ? (
+                <div key={followingUser._id} className="bg-default-100 p-4 rounded-lg shadow-md flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Avatar
+                      src={followingUser.profilePhoto}
+                      size="sm"
+                      className="rounded-full"
+                      alt={`${followingUser.name}'s profile`}
+                    />
+                    <span className="ml-2 font-semibold">{followingUser.name}</span>
+                  </div>
+                </div>
+              ) : null;
+            })}
+          </div>
+        </div>
       </div>
 
-      {/* Right Side - People You May Know Section */}
+      {/* Right Side - People You May Follow Section */}
       <div className="mt-10 sm:ml-6 sm:w-1/3">
         <h3 className="text-2xl font-bold mb-4">People You May Follow</h3>
         <div className="grid grid-cols-1 gap-6">
-          {otherUsers.map((otherUser :IUser) => (
+          {otherUsers.map((otherUser: IUser) => (
             <div key={otherUser._id} className="bg-default-100 p-6 rounded-lg shadow-lg flex items-center justify-between">
               <div className="flex items-center">
                 {/* Profile Avatar with Verification */}
@@ -149,17 +176,26 @@ const UserProfilePage = () => {
                 </div>
               </div>
 
-              {/* Follow/Unfollow with Icons */}
+              {/* Follow/Unfollow Button */}
               <div className="flex items-center">
-                {followStatus[otherUser._id] ? (
-                  <Button onClick={() => toggleFollow(otherUser._id)} className="bg-default-300 text-default-700 rounded-lg p-2 hover:shadow-lg">
+                <Button 
+                  onClick={() => currentUserData.following?.includes(otherUser._id) 
+                    ? handleUnfollowAction(otherUser) 
+                    : handleFollowAction(otherUser)
+                  } 
+                  className={`rounded-lg p-2 hover:shadow-lg ${
+                    currentUserData.following?.includes(otherUser._id)
+                      ? "bg-default-300 text-default-700"
+                      : "bg-blue-500 text-white"
+                  }`}
+                  disabled={isFollowing || isUnfollowing}
+                >
+                  {currentUserData.following?.includes(otherUser._id) ? (
                     <BsPersonDash className="w-5 h-5" />
-                  </Button>
-                ) : (
-                  <Button onClick={() => toggleFollow(otherUser._id)} className="bg-blue-500 text-white rounded-lg p-2 hover:shadow-lg">
+                  ) : (
                     <BsPersonPlus className="w-5 h-5" />
-                  </Button>
-                )}
+                  )}
+                </Button>
               </div>
             </div>
           ))}
