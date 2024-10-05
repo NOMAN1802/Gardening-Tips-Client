@@ -49,6 +49,7 @@ const PostDetailsPage: React.FC<TProps> = ({ params }) => {
     <Container>
       
       <PostDetails post={post} refetchPost={fetchPost} />
+    
     </Container>
   );
 };

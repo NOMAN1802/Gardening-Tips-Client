@@ -1,6 +1,6 @@
 "use client";
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FaThumbsUp, FaThumbsDown, FaRegUser, FaRegTrashAlt, FaEdit } from 'react-icons/fa';
 import { AiOutlineMessage } from 'react-icons/ai';
 import { TPost } from '@/src/types';
@@ -12,6 +12,7 @@ import { useUser } from '@/src/context/user.provider';
 import { useEditComment, useDeleteComment } from '@/src/hooks/post.hook';
 import { Button } from "@nextui-org/button";
 import { toast } from "sonner";
+
 
 interface Comment {
   _id: string;
@@ -57,8 +58,10 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post: initialPost, refetchPos
         upvotedBy: updatedPost.upvotedBy,
         downvotedBy: updatedPost.downvotedBy
       }));
+      refetchPost(); 
     }
   };
+
 
   const editCommentMutation = useEditComment();
   const deleteCommentMutation = useDeleteComment();
@@ -148,7 +151,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post: initialPost, refetchPos
                 src={selectedImage}
                 alt={post.title}
                 width={600}
-                height={800}
+                height={600}
                 className="rounded-lg shadow-lg"
               />
             </div>
@@ -180,8 +183,8 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post: initialPost, refetchPos
                   disabled={isVoting}
                   className="flex items-center space-x-2 cursor-pointer"
                 >
-                  <FaThumbsUp size={24} className={isUpvoted ? 'text-blue-500' : 'text-gray-400'} />
-                  <span>{post.upVotes}</span>
+                  <FaThumbsUp size={24} className={isUpvoted ? 'text-blue-600' : 'text-gray-400'} />
+                  <span>{post?.upVotes}</span>
                 </button>
                 <button 
                   onClick={() => handleVoteClick('downvote')} 
@@ -189,8 +192,10 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post: initialPost, refetchPos
                   className="flex items-center space-x-2 cursor-pointer"
                 >
                   <FaThumbsDown size={24} className={isDownvoted ? 'text-red-500' : 'text-gray-400'} />
-                  <span>{post.downVotes}</span>
+                  <span>{post?.downVotes}</span>
                 </button>
+
+
               </div>
             </div>
           </div>

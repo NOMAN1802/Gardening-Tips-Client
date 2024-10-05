@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { favoritePost, followUser, getAllUsers, getUserProfile, unfollowUser, updateUserProfile, votePost } from "../services/UserService";
+import {  favoritePost, followUser, getAllUsers, getUserProfile, unfollowUser, updateUserProfile, votePost } from "../services/UserService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useUser } from "@/src/context/user.provider";
+
 
 export const useGetUsers = () => {
   return useQuery({
@@ -39,10 +40,11 @@ export const usePostActions = () => {
   const queryClient = useQueryClient();
 
   const votePostMutation = useMutation({
-    mutationFn: ({ postId, voteType }: { postId: string; voteType: "upvote" | "downvote" }) =>
-      votePost(postId, voteType, user?._id || ""),
+    mutationFn: ({ postId, voteType,}: { postId: string; voteType: "upvote" | "downvote" }) =>
+      votePost(postId, voteType, user?._id!),
     onSuccess: (data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["posts", variables.postId] });
+      queryClient.invalidateQueries({ queryKey: ["myPosts", variables.postId] });
+      queryClient.invalidateQueries({ queryKey: ["userProfile", user?._id] });
       toast.success(`You ${variables.voteType}d the post!`);
       return data;
     },
@@ -50,6 +52,7 @@ export const usePostActions = () => {
       toast.error(error.message || "Failed to vote. Please try again.");
     },
   });
+
 
   const favoritePostMutation = useMutation({
     mutationFn: (postId: string) => favoritePost(postId, user?._id || ""),
@@ -132,3 +135,4 @@ export const usePostActions = () => {
     isUnfollowing: unfollowUserMutation.isPending,
   };
 };
+

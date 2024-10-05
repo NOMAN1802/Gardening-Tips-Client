@@ -1,5 +1,5 @@
-import envConfig from "@/src/config/envConfig";
 import axiosInstance from "@/src/lib/AxiosInstance";
+
 
 
 export const getAllUsers = async () => {
@@ -42,13 +42,13 @@ export const verifyUser = async (userId: string): Promise<{ success: boolean; pa
 };
 
 
-
 export const votePost = async (postId: string, voteType: "upvote" | "downvote", userId: string) => {
   try {
+    console.log('Attempting to vote with user ID:', userId);
     const { data } = await axiosInstance.post(`/posts/${postId}/vote`, { voteType, userId });
     return data;
   } catch (error: any) {
-    console.error("Error voting:", error);
+    console.error("Error voting:", error.response || error);
     throw new Error(error.response?.data?.message || error.message || "Failed to vote");
   }
 };
@@ -108,3 +108,5 @@ export const unfollowUser = async (userId: string, currentUserId: string): Promi
     throw new Error(error.response?.data?.message || error.message || "Failed to unfollow user");
   }
 };
+
+
