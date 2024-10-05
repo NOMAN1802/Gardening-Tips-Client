@@ -63,7 +63,7 @@ const UserProfilePage = () => {
   if (isLoading || !user || !currentUserData) {
     return <div>Loading...</div>;
   }
-
+console.log(currentUserData)
   return (
     <div className="flex flex-col sm:flex-row">
       {/* Left Side - Profile Section */}
@@ -91,7 +91,7 @@ const UserProfilePage = () => {
               {/* Upvote Count */}
               <div className="mt-2 flex items-center">
                 <BsArrowUpCircle className="text-green-500 w-5 h-5" />
-                <span className="ml-2 text-default-600">Upvotes: {currentUserData?.upvoteCount || 0}</span>
+                <span className="ml-2 text-default-600">Upvotes: {currentUserData?.upVoteCount || 0}</span>
               </div>
               {/* Followers and Following Count */}
               <div className="mt-2">

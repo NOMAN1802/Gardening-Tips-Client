@@ -154,7 +154,7 @@ export const deleteComment = async (postId: string, commentId: string, commentDa
       },
     });
     return data;
-  } catch (error) {
+  } catch (error :any) {
     console.error('Delete Comment Error:', error.response?.data || error.message);
     throw error;
   }

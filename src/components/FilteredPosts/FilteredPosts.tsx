@@ -7,9 +7,10 @@ import { FaThLarge, FaThList, FaFilter } from "react-icons/fa";
 
 interface FiltersPostsProps {
   posts: TPost[];
+  refetch: () => Promise<void> | void;
 }
 
-const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts }) => {
+const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts,refetch }) => {
   const [filteredPosts, setFilteredPosts] = useState<TPost[]>(posts);
   const [layout, setLayout] = useState<"grid" | "list">("grid");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -143,7 +144,7 @@ const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts }) => {
           {/* Posts Display */}
           <div className={`grid ${layout === "grid" ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"} gap-6`}>
             {filteredPosts.map((post) => (
-              <PostCard key={post._id} post={post} layout={layout} />
+              <PostCard key={post._id} post={post} layout={layout}  />
             ))}
           </div>
         </div>

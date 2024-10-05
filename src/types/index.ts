@@ -14,11 +14,11 @@ export interface IUser {
   mobileNumber: string;
   profilePhoto: string;
   isVerified?:boolean;
-  upvoteCount?:number;
+  upVoteCount?:number;
   isFollowed? : boolean;
   followers?:IUser[];
+  favoritesPosts?:TPost[];
   following?:IUser[];
-  postsCount?:string;
   createdAt?: string;
   updatedAt?: string;
   favoritePosts?: string[]; 

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import {  favoritePost, followUser, getAllUsers, getUserProfile, unfollowUser, updateUserProfile, votePost } from "../services/UserService";
+import {  favoritePost, followUser, getAllUsers, getUserProfile, unfavoritePost, unfollowUser, updateUserProfile, votePost } from "../services/UserService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useUser } from "@/src/context/user.provider";
@@ -54,17 +54,31 @@ export const usePostActions = () => {
   });
 
 
+ 
   const favoritePostMutation = useMutation({
     mutationFn: (postId: string) => favoritePost(postId, user?._id || ""),
     onSuccess: (data, postId) => {
       queryClient.invalidateQueries({ queryKey: ["posts", postId] });
-      toast.success("Favorites updated successfully!");
-      return data;
+      queryClient.invalidateQueries({ queryKey: ["userProfile", user?._id] });
+      toast.success("Post added to favorites");
     },
     onError: (error: any) => {
-      toast.error(error.message || "Failed to update favorites. Please try again.");
+      toast.error(error.message || "Failed to add to favorites. Please try again.");
     },
   });
+
+  const unfavoritePostMutation = useMutation({
+    mutationFn: (postId: string) => unfavoritePost(postId, user?._id || ""),
+    onSuccess: (data, postId) => {
+      queryClient.invalidateQueries({ queryKey: ["posts", postId] });
+      queryClient.invalidateQueries({ queryKey: ["userProfile", user?._id] });
+      toast.success("Post removed from favorites");
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to remove from favorites. Please try again.");
+    },
+  });
+
 
   const followUserMutation = useMutation({
     mutationFn: (authorId: string) => followUser(authorId, user?._id || ""),
@@ -100,12 +114,20 @@ export const usePostActions = () => {
     return votePostMutation.mutateAsync({ postId, voteType });
   };
 
-  const handleFavorite = async (postId: string) => {
+   const handleFavorite = async (postId: string) => {
     if (!user) {
       toast.error("Please log in to favorite");
       return null;
     }
     return favoritePostMutation.mutateAsync(postId);
+  };
+
+  const handleUnFavorite = async (postId: string) => {
+    if (!user) {
+      toast.error("Please log in to unfavorite");
+      return null;
+    }
+    return unfavoritePostMutation.mutateAsync(postId);
   };
 
   const handleFollow = async (authorId: string) => {
@@ -127,10 +149,12 @@ export const usePostActions = () => {
   return {
     handleVote,
     handleFavorite,
+    handleUnFavorite,
     handleFollow,
     handleUnfollow,
     isVoting: votePostMutation.isPending,
     isFavoriting: favoritePostMutation.isPending,
+    isUnFavoriting: unfavoritePostMutation.isPending,
     isFollowing: followUserMutation.isPending,
     isUnfollowing: unfollowUserMutation.isPending,
   };

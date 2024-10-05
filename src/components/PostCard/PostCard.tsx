@@ -1,9 +1,13 @@
-import React from 'react';
+"use client";
+
+import React, { useMemo } from 'react';
 import sanitizeHtml from 'sanitize-html';
-import { TPost } from '@/src/types';
+import { IUser, TPost } from '@/src/types';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaThumbsUp, FaThumbsDown, FaHeart } from "react-icons/fa";
+import { FaThumbsUp, FaThumbsDown, FaHeart, FaRegHeart } from "react-icons/fa";
+import { useGetUsers, usePostActions } from '@/src/hooks/user.hook';
+import { useUser } from '@/src/context/user.provider';
 
 interface PostCardProps {
   post: TPost;
@@ -11,6 +15,10 @@ interface PostCardProps {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post, layout = "grid" }) => {
+  const { user } = useUser();
+  const { data: usersData, isLoading, refetch } = useGetUsers();
+  const { handleFavorite, handleUnFavorite, isFavoriting, isUnFavoriting } = usePostActions();
+
   const truncateText = (text: string, limit: number) => {
     const words = text.split(' ');
     if (words.length > limit) {
@@ -26,6 +34,37 @@ const PostCard: React.FC<PostCardProps> = ({ post, layout = "grid" }) => {
     return truncateText(cleanHtml, 20);
   };
 
+  const { currentUserData } = useMemo(() => {
+    if (!usersData || !user) return { currentUserData: null };
+
+    const currentUser = usersData.data.find((u: IUser) => u._id === user?._id);
+    return { currentUserData: currentUser };
+  }, [usersData, user]);
+
+  const handleFavoriteAction = async (postId: string) => {
+    try {
+      await handleFavorite(postId);
+      refetch();
+    } catch (error) {
+      console.error("Favorite error:", error);
+    }
+  };
+
+  const handleUnFavoriteAction = async (postId: string) => {
+    try {
+      await handleUnFavorite(postId);
+      refetch();
+    } catch (error) {
+      console.error("Unfavorite error:", error);
+    }
+  };
+
+  if (isLoading || !currentUserData) {
+    return <div>Loading...</div>;
+  }
+
+  const isPostFavorited = currentUserData.favoritesPosts?.includes(post._id);
+
   return (
     <div className={`bg-default-100 relative rounded overflow-hidden shadow-xl transform hover:scale-105 duration-300 -right-1 -skew-x-2 ${layout === "list" ? "flex space-x-4 p-4" : ""}`}>
       <div className={`relative ${layout === "list" ? "w-40 h-40" : "w-full h-80 mb-4"} group`}>
@@ -36,9 +75,25 @@ const PostCard: React.FC<PostCardProps> = ({ post, layout = "grid" }) => {
           sizes={layout === "list" ? "15vw" : "25vw"}
           className="absolute object-cover rounded-md transition-opacity ease-in-out duration-500"
         />
-        <div className="absolute top-4 right-4 bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 transition">
-          <FaHeart className="text-red-500" />
-        </div>
+
+        <button
+          onClick={() => isPostFavorited
+            ? handleUnFavoriteAction(post._id)
+            : handleFavoriteAction(post._id)
+          }
+          className={`absolute top-4 right-4 p-2 rounded-full shadow-lg hover:shadow-xl transition ${
+            isPostFavorited
+              ? "bg-default-300 text-default-700"
+              : "bg-white text-gray-400 hover:bg-gray-100"
+          }`}
+          disabled={isFavoriting || isUnFavoriting}
+        >
+          {isPostFavorited ? (
+            <FaHeart className="w-5 h-5 text-red-500" />
+          ) : (
+            <FaRegHeart className="w-5 h-5" />
+          )}
+        </button>
       </div>
 
       <div className={`flex flex-col ${layout === "list" ? "w-full justify-between" : "items-start my-2 py-2 space-y-2"}`}>

@@ -202,7 +202,7 @@ const MyPosts = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-
+ console.log(myPosts)
   const handleUpdate = (post: TPost) => {
     setSelectedPost(post);
     setIsUpdateModalOpen(true);

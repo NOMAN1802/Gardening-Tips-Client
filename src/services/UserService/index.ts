@@ -53,17 +53,6 @@ export const votePost = async (postId: string, voteType: "upvote" | "downvote", 
   }
 };
 
-export const favoritePost = async (postId: string, userId: string) => {
-  try {
-    const { data } = await axiosInstance.post(`/users/favorite/${postId}`, { userId });
-    return data;
-  } catch (error: any) {
-    console.error("Error favoriting post:", error);
-    throw new Error(error.response?.data?.message || error.message || "Failed to favorite post");
-  }
-};
-
-
 
 export const getUserProfile = async (userId: string) => {
   try {
@@ -109,4 +98,23 @@ export const unfollowUser = async (userId: string, currentUserId: string): Promi
   }
 };
 
+
+export const favoritePost = async (postId: string, userId: string) => {
+  try {
+    const { data } = await axiosInstance.post(`/users/favorite/${postId}`, { userId });
+    return data;
+  } catch (error: any) {
+    console.error("Error favoriting post:", error);
+    throw new Error(error.response?.data?.message || error.message || "Failed to favorite post");
+  }
+};
+export const unfavoritePost = async (postId: string, userId: string) => {
+  try {
+    const { data } = await axiosInstance.post(`/users/unfavorite/${postId}`, { userId });
+    return data;
+  } catch (error: any) {
+    console.error("Error favoriting post:", error);
+    throw new Error(error.response?.data?.message || error.message || "Failed to favorite post");
+  }
+};
 
