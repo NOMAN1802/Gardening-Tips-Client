@@ -43,6 +43,15 @@ interface Author {
   isVerified: boolean;
 }
 
+
+export interface Comment {
+  _id: string;
+  content: string;
+  commentator: {
+    _id: string;
+    name: string;
+  };
+}
 // Post Type
 export interface TPost {
   _id: string;
@@ -57,7 +66,7 @@ export interface TPost {
   downVotes: number;
   upvotedBy: string[];
   downvotedBy: string[];
-  comments: string[];
+  comments: Comment[];
   createdAt: string;
   updatedAt: string;
   __v: number;
