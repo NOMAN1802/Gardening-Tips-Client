@@ -20,8 +20,8 @@ const UserProfilePage = () => {
   const { currentUserData, otherUsers } = useMemo(() => {
     if (!usersData || !user) return { currentUserData: null, otherUsers: [] };
 
-    const currentUser = usersData.data.find((u: IUser) => u._id === user._id);
-    const others = usersData.data.filter((u: IUser) => u._id !== user._id);
+    const currentUser = usersData.data.find((u: IUser) => u._id === user?._id);
+    const others = usersData?.data?.filter((u: IUser) => u._id !== user?._id);
 
     return { currentUserData: currentUser, otherUsers: others };
   }, [usersData, user]);
@@ -37,7 +37,7 @@ const UserProfilePage = () => {
 
   const handleUnfollowAction = async (userToUnfollow: IUser) => {
     try {
-      await handleUnfollow(userToUnfollow._id);
+      await handleUnfollow(userToUnfollow?._id);
       refetch();
     } catch (error) {
       console.error("Unfollow error:", error);
@@ -45,11 +45,11 @@ const UserProfilePage = () => {
   };
 
   const handleUserVerify = async () => {
-    if (currentUserData && !currentUserData.isVerified) {
+    if (currentUserData && !currentUserData?.isVerified) {
       try {
         const result = await verifyUser(currentUserData._id);
-        if (result.success && result.payment_url) {
-          window.location.href = result.payment_url;
+        if (result?.success && result?.payment_url) {
+          window.location.href = result?.payment_url;
         } else {
           toast.error(result.error || "Verification failed. Please try again.");
         }
@@ -78,7 +78,7 @@ const UserProfilePage = () => {
                 className={`rounded-full ${currentUserData.isVerified ? "ring-4 ring-blue-500" : ""}`}
                 alt={`${currentUserData.name}'s profile`}
               />
-              {currentUserData.isVerified && (
+              {currentUserData?.isVerified === true && (
                 <Badge className="absolute bottom-0 right-0" shape="circle" variant="flat">
                   <BsCheckCircle className="text-blue-500" />
                 </Badge>
@@ -87,34 +87,34 @@ const UserProfilePage = () => {
 
             {/* User Info */}
             <div className="ml-6">
-              <h2 className="text-2xl font-bold text-default-800">{currentUserData.name}</h2>
+              <h2 className="text-2xl font-bold text-default-800">{currentUserData?.name}</h2>
               {/* Upvote Count */}
               <div className="mt-2 flex items-center">
                 <BsArrowUpCircle className="text-green-500 w-5 h-5" />
-                <span className="ml-2 text-default-600">Upvotes: {currentUserData.upvoteCount || 0}</span>
+                <span className="ml-2 text-default-600">Upvotes: {currentUserData?.upvoteCount || 0}</span>
               </div>
               {/* Followers and Following Count */}
               <div className="mt-2">
-                <span className="mr-4">Followers: {currentUserData.followers?.length || 0}</span>
-                <span>Following: {currentUserData.following?.length || 0}</span>
+                <span className="mr-4">Followers: {currentUserData?.followers?.length || 0}</span>
+                <span>Following: {currentUserData?.following?.length || 0}</span>
               </div>
               {/* Favorite Posts Count */}
               <div className="mt-2">
-                <span>Favorite Posts: {currentUserData.favoritePosts?.length || 0}</span>
+                <span>Favorite Posts: {currentUserData?.favoritePosts?.length || 0}</span>
               </div>
             </div>
             {/* Verified Button */}
             <div className="mt-4">
               <Button
                 className={`px-4 py-2 rounded-lg ${
-                  currentUserData.isVerified 
+                  currentUserData?.isVerified ===true 
                     ? "bg-blue-500 text-white" 
                     : "bg-default-300 text-default-700 hover:bg-blue-400 hover:text-white"
                 }`}
                 onClick={handleUserVerify}
                 disabled={currentUserData.isVerified}
               >
-                {currentUserData.isVerified ? (
+                {currentUserData?.isVerified === true ? (
                   <>
                     <BsCheckCircle className="mr-2" /> Verified
                   </>
@@ -130,18 +130,18 @@ const UserProfilePage = () => {
         <div className="mt-6">
           <h3 className="text-2xl font-bold mb-4">Your Following</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {currentUserData.following?.map((followingId: string) => {
-              const followingUser = otherUsers.find((u: IUser) => u._id === followingId);
+            {currentUserData?.following?.map((followingId: string) => {
+              const followingUser = otherUsers?.find((u: IUser) => u?._id === followingId);
               return followingUser ? (
-                <div key={followingUser._id} className="bg-default-100 p-4 rounded-lg shadow-md flex items-center justify-between">
+                <div key={followingUser?._id} className="bg-default-100 p-4 rounded-lg shadow-md flex items-center justify-between">
                   <div className="flex items-center">
                     <Avatar
-                      src={followingUser.profilePhoto}
+                      src={followingUser?.profilePhoto}
                       size="sm"
                       className="rounded-full"
-                      alt={`${followingUser.name}'s profile`}
+                      alt={`${followingUser?.name}'s profile`}
                     />
-                    <span className="ml-2 font-semibold">{followingUser.name}</span>
+                    <span className="ml-2 font-semibold">{followingUser?.name}</span>
                   </div>
                 </div>
               ) : null;
@@ -155,42 +155,42 @@ const UserProfilePage = () => {
         <h3 className="text-2xl font-bold mb-4">People You May Follow</h3>
         <div className="grid grid-cols-1 gap-6">
           {otherUsers.map((otherUser: IUser) => (
-            <div key={otherUser._id} className="bg-default-100 p-6 rounded-lg shadow-lg flex items-center justify-between">
+            <div key={otherUser?._id} className="bg-default-100 p-6 rounded-lg shadow-lg flex items-center justify-between">
               <div className="flex items-center">
                 {/* Profile Avatar with Verification */}
                 <div className="relative">
                   <Avatar
-                    src={otherUser.profilePhoto}
+                    src={otherUser?.profilePhoto}
                     size="lg"
-                    className={`rounded-full ${otherUser.isVerified ? "ring-4 ring-blue-500" : ""}`}
-                    alt={`${otherUser.name}'s profile`}
+                    className={`rounded-full ${otherUser?.isVerified===true ? "ring-4 ring-blue-500" : ""}`}
+                    alt={`${otherUser?.name}'s profile`}
                   />
-                  {otherUser.isVerified && (
+                  {otherUser?.isVerified ===true && (
                     <Badge className="absolute bottom-0 right-0" shape="circle" variant="flat">
                       <BsCheckCircle className="text-blue-500" />
                     </Badge>
                   )}
                 </div>
                 <div className="ml-4">
-                  <h4 className="text-xl font-semibold">{otherUser.name}</h4>
+                  <h4 className="text-xl font-semibold">{otherUser?.name}</h4>
                 </div>
               </div>
 
               {/* Follow/Unfollow Button */}
               <div className="flex items-center">
                 <Button 
-                  onClick={() => currentUserData.following?.includes(otherUser._id) 
+                  onClick={() => currentUserData?.following?.includes(otherUser?._id) 
                     ? handleUnfollowAction(otherUser) 
                     : handleFollowAction(otherUser)
                   } 
                   className={`rounded-lg p-2 hover:shadow-lg ${
-                    currentUserData.following?.includes(otherUser._id)
+                    currentUserData?.following?.includes(otherUser?._id)
                       ? "bg-default-300 text-default-700"
                       : "bg-blue-500 text-white"
                   }`}
                   disabled={isFollowing || isUnfollowing}
                 >
-                  {currentUserData.following?.includes(otherUser._id) ? (
+                  {currentUserData?.following?.includes(otherUser?._id) ? (
                     <BsPersonDash className="w-5 h-5" />
                   ) : (
                     <BsPersonPlus className="w-5 h-5" />

@@ -2,17 +2,6 @@ import envConfig from "@/src/config/envConfig";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-// const axiosInstance = axios.create({
-//   baseURL: envConfig.baseApi,
-// });
-
-// export default axiosInstance;
-
-
-
-
-
-// Create an instance of Axios
 const axiosInstance = axios.create({
   baseURL: envConfig.baseApi, 
   headers: {
@@ -23,7 +12,6 @@ const axiosInstance = axios.create({
 // Add a request interceptor to include the accessToken in headers
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Get the accessToken from cookies
     const accessToken = Cookies.get("accessToken");
     
     if (accessToken) {

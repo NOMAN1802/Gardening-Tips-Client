@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { createComment, createPost, deletePost, getMyPosts, updatePost } from "../services/PostService";
+import { createComment, createPost, deleteComment, deletePost, editComment, getMyPosts, updatePost } from "../services/PostService";
 import { Comment } from "../components/Comment/Comment";
 
 
@@ -75,29 +75,30 @@ export const useCreateComment = (postId: string) => {
 
   
 
+  export const useEditComment = () => {
+    const queryClient = useQueryClient();
+    return useMutation<any, Error, { postId: string; commentId: string; commentData: FormData }>({
+      mutationFn: ({ postId, commentId, commentData }) => editComment(postId, commentId, commentData),
+      onSuccess: (data, variables) => {
+        queryClient.invalidateQueries({ queryKey: ['posts', variables.postId] });
+        toast.success("Comment edited successfully");
+      },
+      onError: (error) => {
+        toast.error(error.message || "Failed to edit comment");
+      },
+    });
+  };
   
-//   export const useEditComment = (postId: string, commentId: string) => {
-//     return useMutation<any, Error, FormData>({
-//       mutationKey: ["EDIT_COMMENT", postId, commentId],
-//       mutationFn: async (commentData) => await editComment(postId, commentId, commentData),
-//       onSuccess: () => {
-//         toast.success("Comment edited successfully");
-//       },
-//       onError: (error) => {
-//         toast.error(error.message || "Failed to edit comment");
-//       },
-//     });
-//   };
-  
-//   export const useDeleteComment = (postId: string, commentId: string) => {
-//     return useMutation<any, Error>({
-//       mutationKey: ["DELETE_COMMENT", postId, commentId],
-//       mutationFn: async () => await deleteComment(postId, commentId),
-//       onSuccess: () => {
-//         toast.success("Comment deleted successfully");
-//       },
-//       onError: (error) => {
-//         toast.error(error.message || "Failed to delete comment");
-//       },
-//     });
-//   };
+  export const useDeleteComment = () => {
+    const queryClient = useQueryClient();
+    return useMutation<any, Error, { postId: string; commentId: string; commentData: FormData }>({
+      mutationFn: ({ postId, commentId, commentData }) => deleteComment(postId, commentId, commentData),
+      onSuccess: (data, variables) => {
+        queryClient.invalidateQueries({ queryKey: ['posts', variables.postId] });
+        toast.success("Comment deleted successfully");
+      },
+      onError: (error) => {
+        toast.error(error.message || "Failed to delete comment");
+      },
+    });
+  };

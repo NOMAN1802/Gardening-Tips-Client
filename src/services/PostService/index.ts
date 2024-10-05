@@ -2,6 +2,7 @@ import envConfig from "@/src/config/envConfig";
 import { delay } from "@/src/utils/delay";
 import axiosInstance from "@/src/lib/AxiosInstance";
 import { revalidateTag } from "next/cache";
+import axios from "axios";
 
 
 export const createPost = async (formData: FormData): Promise<any> => {
@@ -130,31 +131,31 @@ export const createComment = async (postId: string, commentData: { commentator: 
   }
 };
 
-//   export const editComment = async (postId: string, commentId: string, commentData: FormData): Promise<any> => {
-//     try {
-//       const { data } = await axiosInstance.patch(`/posts/${postId}/comments/${commentId}`, commentData, {
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//       });
-  
-//       revalidateTag(`post-${postId}-comments`);
-//       return data;
-//     } catch (error) {
-//       console.error(error);
-//       throw new Error("Failed to edit comment");
-//     }
-//   };
-  
+export const editComment = async (postId: string, commentId: string, commentData: FormData): Promise<any> => {
+  try {
+    const { data } = await axiosInstance.patch(`/posts/${postId}/comments/${commentId}`, commentData);
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Edit Comment Error:', error.response?.data || error.message);
+    } else {
+      console.error('Edit Comment Error:', error);
+    }
+    throw error;
+  }
+};
 
-//   export const deleteComment = async (postId: string, commentId: string): Promise<any> => {
-//     try {
-//       const { data } = await axiosInstance.delete(`/posts/${postId}/comments/${commentId}`);
-  
-//       revalidateTag(`post-${postId}-comments`);
-//       return data;
-//     } catch (error) {
-//       console.error(error);
-//       throw new Error("Failed to delete comment");
-//     }
-//   };
+export const deleteComment = async (postId: string, commentId: string, commentData: FormData): Promise<any> => {
+  try {
+    const { data } = await axiosInstance.delete(`/posts/${postId}/comments/${commentId}`, {
+      data: Object.fromEntries(commentData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return data;
+  } catch (error) {
+    console.error('Delete Comment Error:', error.response?.data || error.message);
+    throw error;
+  }
+};

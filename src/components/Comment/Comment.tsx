@@ -66,4 +66,3 @@ const CommentSection: React.FC<CommentSectionProps> = ({ postId ,refetchPost}) =
 };
 
 export default CommentSection;
-
