@@ -97,7 +97,7 @@
 {
   "extends": [
     "next/core-web-vitals", 
-    "plugin:react/recommended",
+    "next/typescript",
     "plugin:react-hooks/recommended"
     
 ],

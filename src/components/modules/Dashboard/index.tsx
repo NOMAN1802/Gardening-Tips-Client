@@ -76,14 +76,14 @@ const Sidebar = () => {
                 href="/"
               >
                 <h2 className="text-3xl font-bold text-black">
-                  <span className="text-default-600">Shoppy</span>My
+                  <span className="text-default-600">Planto</span>
                 </h2>
               </Link>
               <div className="flex flex-col items-center mt-4">
                 <img
                   alt="Profile"
                   className="w-16 h-16 rounded-full object-cover"
-                  src="/images/profile.jpg"
+                  src={user?.profilePhoto}
                 />
                 <p className="mt-2 text-lg font-medium text-default-700">
                   {user?.name}
@@ -137,7 +137,7 @@ const Sidebar = () => {
             href="/"
           >
             <h2 className="text-3xl font-bold text-black">
-              <span className="text-default-600">Shoppy</span>My
+              <span className="text-default-600">Planto</span>
             </h2>
           </Link>
           <div className="flex flex-col items-center mt-4">

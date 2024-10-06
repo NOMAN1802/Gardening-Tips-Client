@@ -1,15 +1,17 @@
-import React, { Suspense } from "react";
-
 import PostCategories from "@/src/components/modules/Home/PostCategories/PostCategories";
 import Slider from "@/src/components/modules/Home/Slider/Slider";
-import Loading from "@/src/components/Loading/Loading";
+import RecentGardening from "../../../components/modules/Home/RecentGardening/RecentGardening";
+import TrandingPostsPage from "./(tranding)/page";
+
 
 const HomePage = () => {
   return (
-    <Suspense fallback={<Loading />}>
+    <div>
       <Slider />
       <PostCategories />
-    </Suspense>
+      <TrandingPostsPage/>
+      <RecentGardening/>
+    </div>
   );
 };
 

@@ -7,7 +7,10 @@ import {
   deleteComment,
   deletePost,
   editComment,
+  getAllPosts,
+  getAllPostsClient,
   getMyPosts,
+  getTrandingPosts,
   updatePost,
 } from "../services/PostService";
 import { Comment } from "../components/Comment/Comment";
@@ -122,3 +125,21 @@ export const useDeleteComment = () => {
     },
   });
 };
+
+
+
+export const useGetTrandingPosts = () => {
+  return useQuery({
+    queryKey: ["posts"],
+    queryFn: getTrandingPosts,
+  });
+};
+
+export const useGetAllPosts = () => {
+  return useQuery({
+    queryKey: ["posts"],
+    queryFn: getAllPostsClient,
+  });
+};
+
+

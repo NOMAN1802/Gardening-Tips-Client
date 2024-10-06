@@ -28,6 +28,9 @@ export async function middleware(request: NextRequest) {
       );
     }
   }
+  if (pathname === "/posts" && (user.role === "USER" || user.role === "ADMIN")) {
+    return NextResponse.next();
+  }
 
   if (user?.role && roleBasedRoutes[user?.role as Role]) {
     const routes = roleBasedRoutes[user?.role as Role];
@@ -41,5 +44,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:page*", "/profile/:page*", "/login", "/register"],
+  matcher: ["/dashboard/:page*", "/profile/:page*", "/posts", "/login", "/register"],
 };

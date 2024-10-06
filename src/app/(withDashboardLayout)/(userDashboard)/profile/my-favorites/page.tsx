@@ -17,6 +17,7 @@ const MyFavouritePage = () => {
     data: favoritePostsResponse,
     isLoading,
     error,
+    refetch
   } = useQuery({
     queryKey: ["favoritePosts", user?._id],
     queryFn: () => myFavouritePost(user?._id as string),
@@ -36,7 +37,7 @@ const MyFavouritePage = () => {
       {favoritePosts.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {favoritePosts.map((post: TPost) => (
-            <PostCard key={post._id} layout="grid" post={post} />
+            <PostCard key={post._id} layout="grid" post={post} postRefetch={refetch} />
           ))}
         </div>
       ) : (

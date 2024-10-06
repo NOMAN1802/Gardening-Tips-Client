@@ -1,7 +1,7 @@
 import axios from "axios";
-
 import envConfig from "@/src/config/envConfig";
 import axiosInstance from "@/src/lib/AxiosInstance";
+
 
 export const createPost = async (formData: FormData): Promise<any> => {
   try {
@@ -193,4 +193,66 @@ export const deleteComment = async (
     );
     throw error;
   }
+};
+
+
+export const getAllUsers = async () => {
+  try {
+    const { data } = await axiosInstance.get("/users");
+
+    return data;
+  } catch (error) {
+    // console.error("Error fetching users:", error);
+    throw error;
+  }
+};
+export const getTrandingPosts = async() =>{
+  try {
+    const {data} = await axiosInstance.get(`/posts?sortBy=-upVoats&limit=4`);
+  
+    return data;
+  
+     } catch (error) {
+
+    // console.error("Error fetching users:", error);
+    throw error;
+    
+    }
+}
+
+export const getAllPostsClient = async() =>{
+  try {
+    const {data} = await axiosInstance.get("/posts");
+  
+    return data;
+  
+     } catch (error) {
+
+    // console.error("Error fetching users:", error);
+    throw error;
+    
+    }
+}
+export const getAllTrandingPosts = async (type?: string, category?: string) => {
+  let fetchOptions: RequestInit = {
+    method: "GET",
+    cache: "no-store",
+  };
+
+  if (type === "isr") {
+    fetchOptions = {
+      next: {
+        tags: ["posts"],
+      },
+    };
+  }
+
+  const url = new URL(`${envConfig.baseApi}/posts?sortBy=-upVoats&limit=4`);
+  const res = await fetch(url.toString(), fetchOptions);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch posts data");
+  }
+
+  return res.json();
 };
