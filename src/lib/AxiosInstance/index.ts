@@ -1,9 +1,10 @@
-import envConfig from "@/src/config/envConfig";
 import axios from "axios";
 import Cookies from "js-cookie";
 
+import envConfig from "@/src/config/envConfig";
+
 const axiosInstance = axios.create({
-  baseURL: envConfig.baseApi, 
+  baseURL: envConfig.baseApi,
   headers: {
     "Content-Type": "application/json",
   },
@@ -13,7 +14,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = Cookies.get("accessToken");
-    
+
     if (accessToken) {
       // Set the Authorization header if the token is available
       config.headers["Authorization"] = `${accessToken}`;
@@ -23,7 +24,7 @@ axiosInstance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosInstance;

@@ -1,12 +1,11 @@
 import "@/src/styles/globals.css";
 import { Metadata, Viewport } from "next";
-import { Providers } from "../lib/Providers";
 import clsx from "clsx";
 
+import { Providers } from "../lib/Providers";
 
 import { siteConfig } from "@/src/config/site";
 import { fontSans } from "@/src/config/fonts";
-
 
 export const metadata: Metadata = {
   title: {
@@ -40,8 +39,8 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-          <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-         {children}
+        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+          {children}
         </Providers>
       </body>
     </html>

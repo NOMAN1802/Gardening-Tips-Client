@@ -1,6 +1,6 @@
 "use client";
 import Image from 'next/image';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { FaThumbsUp, FaThumbsDown, FaRegUser, FaRegTrashAlt, FaEdit } from 'react-icons/fa';
 import { AiOutlineMessage } from 'react-icons/ai';
 import { TPost } from '@/src/types';

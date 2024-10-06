@@ -1,14 +1,14 @@
 import * as React from "react";
+import Image from "next/image";
 
 import { IconSvgProps } from "@/src/types";
-import Image from "next/image";
 
 interface LogoProps {
   size?: number;
   width?: number;
   height?: number;
   alt?: string;
-  rounded? :boolean,
+  rounded?: boolean;
 }
 
 // Logo component that uses Next.js Image for the logo
@@ -20,13 +20,12 @@ export const Logo: React.FC<LogoProps> = ({
   ...props
 }) => (
   <Image
-    src="/images/Logo-Planto.png" 
     alt={alt}
-    width={width || size}  
-    height={height || size} 
     className="rounded"
-    {...props} 
-    
+    height={height || size}
+    src="/images/Logo-Planto.png"
+    width={width || size}
+    {...props}
   />
 );
 

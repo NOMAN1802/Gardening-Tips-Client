@@ -2,14 +2,22 @@
 const nextConfig = {
 
   
-    images: {
-      remotePatterns: [
-        {
-          protocol: "https",
-          hostname: "**",
-        },
-      ],
-    },
-  };
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
+  },
+  // webpack: (config) => {
+  //   config.resolve.fallback = {
+  //     ...config.resolve.fallback,
+  //     fs: false, 
+  //   };
   
-  module.exports = nextConfig;
+  //   return config;
+  // },
+};
+
+module.exports = nextConfig;

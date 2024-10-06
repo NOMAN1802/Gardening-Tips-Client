@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const ManagePostPage = () => {
-  return (
-    <div>ManagePostPage</div>
-  )
-}
+  return <div>ManagePostPage</div>;
+};
 
-export default ManagePostPage
+export default ManagePostPage;

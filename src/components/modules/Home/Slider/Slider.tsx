@@ -33,7 +33,6 @@ const slides = [
 
 const Slider = () => {
   const [current, setCurrent] = useState(0);
-  
 
   return (
     <div className="h-[calc(100vh-80px)] overflow-hidden">
@@ -43,8 +42,8 @@ const Slider = () => {
       >
         {slides.map((slide) => (
           <div
-            className={`${slide.bg} w-screen h-full flex flex-col gap-16 xl:flex-row`}
             key={slide.id}
+            className={`${slide.bg} w-screen h-full flex flex-col gap-16 xl:flex-row`}
           >
             {/* TEXT CONTAINER */}
             <div className="h-1/2 xl:w-1/2 xl:h-full flex flex-col items-center justify-center gap-8 2xl:gap-12 text-center">
@@ -63,11 +62,11 @@ const Slider = () => {
             {/* IMAGE CONTAINER */}
             <div className="h-1/2 xl:w-1/2 xl:h-full relative">
               <Image
-                src={slide.img}
-                alt=""
                 fill
-                sizes="100%"
+                alt=""
                 className="object-cover"
+                sizes="100%"
+                src={slide.img}
               />
             </div>
           </div>
@@ -76,14 +75,14 @@ const Slider = () => {
       <div className="absolute m-auto left-1/2 bottom-8 flex gap-4">
         {slides.map((slide, index) => (
           <div
+            key={slide.id}
             className={`w-3 h-3  rounded-full ring-1 ring-gray-600 cursor-pointer flex items-center justify-center ${
               current === index ? "scale-150" : ""
             }`}
-            key={slide.id}
             onClick={() => setCurrent(index)}
           >
             {current === index && (
-              <div className="w-[6px] h-[6px] bg-gray-600 rounded-full"></div>
+              <div className="w-[6px] h-[6px] bg-gray-600 rounded-full" />
             )}
           </div>
         ))}

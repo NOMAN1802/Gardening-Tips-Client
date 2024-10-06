@@ -1,16 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { FaThLarge, FaThList, FaFilter } from "react-icons/fa";
+
 import PostCard from "@/src/components/PostCard/PostCard";
 import { TPost } from "@/src/types";
-import { FaThLarge, FaThList, FaFilter } from "react-icons/fa";
 
 interface FiltersPostsProps {
   posts: TPost[];
-  refetch: () => Promise<void> | void;
+  
 }
 
-const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts,refetch }) => {
+const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts }) => {
   const [filteredPosts, setFilteredPosts] = useState<TPost[]>(posts);
   const [layout, setLayout] = useState<"grid" | "list">("grid");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -18,7 +19,15 @@ const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts,refetch }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
-  const categories = ["All", "Vegetables", "Flowers", "Landscaping", "Herb", "Indoor", "Fruits"];
+  const categories = [
+    "All",
+    "Vegetables",
+    "Flowers",
+    "Landscaping",
+    "Herb",
+    "Indoor",
+    "Fruits",
+  ];
 
   const handleFilter = () => {
     let filtered = posts;
@@ -28,7 +37,7 @@ const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts,refetch }) => {
         (post) =>
           post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
           post.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          post.author.name.toLowerCase().includes(searchQuery.toLowerCase())
+          post.author.name.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
 
@@ -46,16 +55,18 @@ const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts,refetch }) => {
   }, [selectedCategory, minUpvotes, searchQuery]);
 
   const FilterSection = () => (
-    <div className={`bg-default-100 rounded-lg p-4 ${showFilters ? 'block' : 'hidden md:block'}`}>
+    <div
+      className={`bg-default-100 rounded-lg p-4 ${showFilters ? "block" : "hidden md:block"}`}
+    >
       {/* Search Field */}
       <div className="mb-4">
         <h3 className="font-semibold text-lg mb-2">Search</h3>
         <input
+          className="rounded-md px-4 py-2 w-full"
+          placeholder="Search by title, category, or author"
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search by title, category, or author"
-          className="rounded-md px-4 py-2 w-full"
         />
       </div>
 
@@ -63,9 +74,9 @@ const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts,refetch }) => {
       <div className="mb-4">
         <h3 className="font-semibold text-lg mb-2">Category</h3>
         <select
+          className="rounded-md px-4 py-2 w-full"
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="rounded-md px-4 py-2 w-full"
         >
           {categories.map((category) => (
             <option key={category} value={category}>
@@ -79,23 +90,23 @@ const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts,refetch }) => {
       <div className="mb-4">
         <h3 className="font-semibold text-lg mb-2">Minimum Upvotes</h3>
         <input
-          type="number"
+          className="rounded-md px-4 py-2 w-full"
           min="0"
+          type="number"
           value={minUpvotes}
           onChange={(e) => setMinUpvotes(Number(e.target.value))}
-          className="rounded-md px-4 py-2 w-full"
         />
         <p className="text-sm">Upvotes: {minUpvotes}</p>
       </div>
 
       {/* Clear Filters */}
       <button
+        className="bg-red-500 text-white px-4 py-2 rounded-md w-full"
         onClick={() => {
           setSelectedCategory("All");
           setMinUpvotes(0);
           setSearchQuery("");
         }}
-        className="bg-red-500 text-white px-4 py-2 rounded-md w-full"
       >
         Clear Filters
       </button>
@@ -108,10 +119,11 @@ const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts,refetch }) => {
         {/* Filter Toggle for Mobile */}
         <div className="md:hidden mb-4">
           <button
-            onClick={() => setShowFilters(!showFilters)}
             className="bg-default-500  px-4 py-2 rounded-md w-full flex items-center justify-center"
+            onClick={() => setShowFilters(!showFilters)}
           >
-            <FaFilter className="mr-2" /> {showFilters ? 'Hide Filters' : 'Show Filters'}
+            <FaFilter className="mr-2" />{" "}
+            {showFilters ? "Hide Filters" : "Show Filters"}
           </button>
         </div>
 
@@ -123,18 +135,20 @@ const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts,refetch }) => {
         {/* Post and Layout Section */}
         <div className="col-span-3">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
-            <p className="text-2xl font-semibold mb-2 sm:mb-0">{filteredPosts.length} Posts Found</p>
+            <p className="text-2xl font-semibold mb-2 sm:mb-0">
+              {filteredPosts.length} Posts Found
+            </p>
             {/* Layout Toggle */}
             <div className="flex space-x-4">
               <button
-                onClick={() => setLayout("grid")}
                 className={`p-2 ${layout === "grid" ? "bg-default-800 text-white" : "bg-white text-black"} rounded`}
+                onClick={() => setLayout("grid")}
               >
                 <FaThLarge />
               </button>
               <button
-                onClick={() => setLayout("list")}
                 className={`p-2 ${layout === "list" ? "bg-default-800 text-white" : "bg-white text-black"} rounded`}
+                onClick={() => setLayout("list")}
               >
                 <FaThList />
               </button>
@@ -142,9 +156,11 @@ const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts,refetch }) => {
           </div>
 
           {/* Posts Display */}
-          <div className={`grid ${layout === "grid" ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"} gap-6`}>
+          <div
+            className={`grid ${layout === "grid" ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"} gap-6`}
+          >
             {filteredPosts.map((post) => (
-              <PostCard key={post._id} post={post} layout={layout}  />
+              <PostCard key={post._id} layout={layout} post={post} />
             ))}
           </div>
         </div>
@@ -154,4 +170,3 @@ const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts,refetch }) => {
 };
 
 export default FilteredPosts;
-

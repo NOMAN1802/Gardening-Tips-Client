@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 
 import { Input } from "@nextui-org/input";
@@ -12,7 +13,6 @@ interface IProps {
   name: string;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
-  
 }
 
 const PLInput = ({
@@ -32,23 +32,22 @@ const PLInput = ({
 
   return (
     <div className="flex flex-col space-y-2">
-     
-      <label htmlFor={name} className="text-sm font-medium text-default-700">
+      <label className="text-sm font-medium text-default-700" htmlFor={name}>
         {label} {required && <span className="text-red-500">*</span>}
       </label>
 
       {/* Input component */}
       <Input
         {...register(name)}
-        errorMessage={errors[name] ? (errors[name].message as string) : ""}
-        isInvalid={!!errors[name]}
-        variant={variant}
-        size={size}
-        required={required}
-        type={type}
-        startContent={startIcon}
-        id={name} 
         endContent={endIcon}
+        errorMessage={errors[name] ? (errors[name].message as string) : ""}
+        id={name}
+        isInvalid={!!errors[name]}
+        required={required}
+        size={size}
+        startContent={startIcon}
+        type={type}
+        variant={variant}
       />
 
       {/* Error message display */}

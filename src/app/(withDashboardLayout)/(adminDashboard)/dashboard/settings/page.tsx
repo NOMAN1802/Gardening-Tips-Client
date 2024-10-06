@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const AdminSettingsPage = () => {
-  return (
-    <div>AdminSettingsPage</div>
-  )
-}
+  return <div>AdminSettingsPage</div>;
+};
 
-export default AdminSettingsPage
+export default AdminSettingsPage;

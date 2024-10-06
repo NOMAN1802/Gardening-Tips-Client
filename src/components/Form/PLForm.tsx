@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import {  FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
 interface formConfig {
   defaultValues?: Record<string, any>;
@@ -13,13 +13,8 @@ interface IProps extends formConfig {
   onSubmit: SubmitHandler<any>;
 }
 
-const PLForm = ({
-    children,
-    onSubmit,
-    defaultValues,
-    resolver,
-  }: IProps)  => {
-    const formConfig: formConfig = {};
+const PLForm = ({ children, onSubmit, defaultValues, resolver }: IProps) => {
+  const formConfig: formConfig = {};
 
   if (!!defaultValues) {
     formConfig["defaultValues"] = defaultValues;
@@ -35,10 +30,9 @@ const PLForm = ({
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={submitHandler(onSubmit)}>
-      {children}
-      </form>
+      <form onSubmit={submitHandler(onSubmit)}>{children}</form>
     </FormProvider>
   );
-}
+};
+
 export default PLForm;

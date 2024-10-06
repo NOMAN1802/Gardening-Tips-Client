@@ -11,37 +11,37 @@ import {
 } from "@nextui-org/navbar";
 import NextLink from "next/link";
 import clsx from "clsx";
-import { usePathname } from 'next/navigation'; 
-import { siteConfig } from "@/src/config/site";
-import { Logo } from "@/src/assets/icons";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
-import styles from "./Navbar.module.css";
 import Link from "next/link";
 import { Button } from "@nextui-org/button";
+
 import { ThemeSwitch } from "../ThemeSwitch/theme-switch";
+
+import styles from "./Navbar.module.css";
 import NavbarDropdown from "./NavbarDropdown";
+
+import { Logo } from "@/src/assets/icons";
+import { siteConfig } from "@/src/config/site";
 import { useUser } from "@/src/context/user.provider";
 
 export const Navbar = () => {
   const { user, isLoading } = useUser();
-   const pathname = usePathname();
+  const pathname = usePathname();
   // State to track the active link
   const [activeLink, setActiveLink] = useState(pathname);
-
- 
 
   const handleLinkClick = (href: string) => {
     setActiveLink(href);
   };
 
   return (
-    <NextUINavbar maxWidth="xl" position="sticky" className="bg-opacity-50" >
+    <NextUINavbar className="bg-opacity-50" maxWidth="xl" position="sticky">
       {/* Left section with logo */}
       <NavbarContent className="basis-1/5" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-center items-center gap-1" href="/">
             <Logo />
-            
           </NextLink>
         </NavbarBrand>
       </NavbarContent>
@@ -52,11 +52,11 @@ export const Navbar = () => {
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NextLink
+                className={clsx(
+                  activeLink === item.href ? styles.active1 : styles.default,
+                )}
                 href={item.href}
                 onClick={() => handleLinkClick(item.href)}
-                className={clsx(
-                  activeLink === item.href ? styles.active1 : styles.default
-                )}
               >
                 {item.label}
               </NextLink>
@@ -69,48 +69,45 @@ export const Navbar = () => {
       <NavbarContent className="hidden sm:flex basis-1/5 justify-end items-center">
         <div className=" ml-auto flex items-center">
           <ThemeSwitch />
-          
         </div>
         {user?.email ? (
           <NavbarItem className="hidden sm:flex gap-2">
             <NavbarDropdown />
           </NavbarItem>
         ) : (
-           <NavbarItem className="hidden md:flex">
-         <Button
-         as={Link}
-         className="text-sm font-normal text-default-600 bg-default-200"
-         href='/login'
-
-        variant="flat"
-        >
-       Login
-      </Button>
-     </NavbarItem>
+          <NavbarItem className="hidden md:flex">
+            <Button
+              as={Link}
+              className="text-sm font-normal text-default-600 bg-default-200"
+              href="/login"
+              variant="flat"
+            >
+              Login
+            </Button>
+          </NavbarItem>
         )}
       </NavbarContent>
-        
+
       {/* Mobile Menu */}
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
         <ThemeSwitch />
         <div>
-        {user?.email ? (
-          <NavbarItem className=" gap-2">
-            <NavbarDropdown />
-          </NavbarItem>
-        ) : (
-           <NavbarItem className="gap-2">
-         <Button
-         as={Link}
-         className="text-sm font-normal text-default-600 bg-default-200"
-         href='/login'
-
-        variant="flat"
-        >
-       Login
-      </Button>
-     </NavbarItem>
-        )}
+          {user?.email ? (
+            <NavbarItem className=" gap-2">
+              <NavbarDropdown />
+            </NavbarItem>
+          ) : (
+            <NavbarItem className="gap-2">
+              <Button
+                as={Link}
+                className="text-sm font-normal text-default-600 bg-default-200"
+                href="/login"
+                variant="flat"
+              >
+                Login
+              </Button>
+            </NavbarItem>
+          )}
         </div>
         <NavbarMenuToggle />
       </NavbarContent>
@@ -127,8 +124,3 @@ export const Navbar = () => {
     </NextUINavbar>
   );
 };
-
-
-
-
-

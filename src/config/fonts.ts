@@ -1,5 +1,8 @@
 // import fonts from next/font/google
-import { JetBrains_Mono as FontMono, Inter as FontSans } from "next/font/google";
+import {
+  JetBrains_Mono as FontMono,
+  Inter as FontSans,
+} from "next/font/google";
 
 // Define JetBrains Mono and Inter fonts
 export const fontSans = FontSans({
@@ -14,5 +17,5 @@ export const fontMono = FontMono({
 
 // If using a custom import for Operator Mono, add it separately
 export const operatorMono = {
-  fontFamily: 'Operator Mono, monospace',
+  fontFamily: "Operator Mono, monospace",
 };

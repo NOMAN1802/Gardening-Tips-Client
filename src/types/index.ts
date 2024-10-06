@@ -4,7 +4,6 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
-
 export interface IUser {
   _id: string;
   name: string;
@@ -13,18 +12,17 @@ export interface IUser {
   status: string;
   mobileNumber: string;
   profilePhoto: string;
-  isVerified?:boolean;
-  upVoteCount?:number;
-  isFollowed? : boolean;
-  followers?:IUser[];
-  favoritesPosts?:TPost[];
-  following?:IUser[];
+  isVerified?: boolean;
+  upVoteCount?: number;
+  isFollowed?: boolean;
+  followers?: IUser[];
+  favoritesPosts?: TPost[];
+  following?: IUser[];
   createdAt?: string;
   updatedAt?: string;
-  favoritePosts?: string[]; 
+  favoritePosts?: string[];
   __v?: number;
 }
-
 
 // Author Type
 interface Author {
@@ -43,7 +41,6 @@ interface Author {
   isVerified: boolean;
 }
 
-
 export interface Comment {
   _id: string;
   content: string;
@@ -60,7 +57,7 @@ export interface TPost {
   author: Author;
   category: string;
   isPremium: boolean;
-  isFavorited?: string,
+  isFavorited?: string;
   images: string[];
   upVotes: number;
   downVotes: number;
@@ -71,7 +68,6 @@ export interface TPost {
   updatedAt: string;
   __v: number;
 }
-
 
 export interface PostResponse {
   success: boolean;

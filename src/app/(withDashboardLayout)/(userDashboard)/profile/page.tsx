@@ -2,19 +2,26 @@
 import { Badge } from "@nextui-org/badge";
 import { Button } from "@nextui-org/button";
 import { Avatar } from "@nextui-org/avatar";
-import { BsCheckCircle, BsArrowUpCircle, BsPersonPlus, BsPersonDash } from "react-icons/bs";
+import {
+  BsCheckCircle,
+  BsArrowUpCircle,
+  BsPersonPlus,
+  BsPersonDash,
+} from "react-icons/bs";
 import { useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
 import { useUser } from "@/src/context/user.provider";
 import { useGetUsers, usePostActions } from "@/src/hooks/user.hook";
 import { IUser } from "@/src/types";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { verifyUser } from "@/src/services/UserService";
 
 const UserProfilePage = () => {
   const { user } = useUser();
   const { data: usersData, isLoading, refetch } = useGetUsers();
-  const { handleFollow, handleUnfollow, isFollowing, isUnfollowing } = usePostActions();
+  const { handleFollow, handleUnfollow, isFollowing, isUnfollowing } =
+    usePostActions();
   const router = useRouter();
 
   const { currentUserData, otherUsers } = useMemo(() => {
@@ -48,6 +55,7 @@ const UserProfilePage = () => {
     if (currentUserData && !currentUserData?.isVerified) {
       try {
         const result = await verifyUser(currentUserData._id);
+
         if (result?.success && result?.payment_url) {
           window.location.href = result?.payment_url;
         } else {
@@ -63,7 +71,8 @@ const UserProfilePage = () => {
   if (isLoading || !user || !currentUserData) {
     return <div>Loading...</div>;
   }
-console.log(currentUserData)
+  console.log(currentUserData);
+
   return (
     <div className="flex flex-col sm:flex-row">
       {/* Left Side - Profile Section */}
@@ -74,12 +83,16 @@ console.log(currentUserData)
             {/* Profile Avatar with Verification */}
             <div className="relative">
               <Avatar
-                src={currentUserData.profilePhoto}
-                className={`rounded-full ${currentUserData.isVerified ? "ring-4 ring-blue-500" : ""}`}
                 alt={`${currentUserData.name}'s profile`}
+                className={`rounded-full ${currentUserData.isVerified ? "ring-4 ring-blue-500" : ""}`}
+                src={currentUserData.profilePhoto}
               />
               {currentUserData?.isVerified === true && (
-                <Badge className="absolute bottom-0 right-0" shape="circle" variant="flat">
+                <Badge
+                  className="absolute bottom-0 right-0"
+                  shape="circle"
+                  variant="flat"
+                >
                   <BsCheckCircle className="text-blue-500" />
                 </Badge>
               )}
@@ -87,32 +100,42 @@ console.log(currentUserData)
 
             {/* User Info */}
             <div className="ml-6">
-              <h2 className="text-2xl font-bold text-default-800">{currentUserData?.name}</h2>
+              <h2 className="text-2xl font-bold text-default-800">
+                {currentUserData?.name}
+              </h2>
               {/* Upvote Count */}
               <div className="mt-2 flex items-center">
                 <BsArrowUpCircle className="text-green-500 w-5 h-5" />
-                <span className="ml-2 text-default-600">Upvotes: {currentUserData?.upVoteCount || 0}</span>
+                <span className="ml-2 text-default-600">
+                  Upvotes: {currentUserData?.upVoteCount || 0}
+                </span>
               </div>
               {/* Followers and Following Count */}
               <div className="mt-2">
-                <span className="mr-4">Followers: {currentUserData?.followers?.length || 0}</span>
-                <span>Following: {currentUserData?.following?.length || 0}</span>
+                <span className="mr-4">
+                  Followers: {currentUserData?.followers?.length || 0}
+                </span>
+                <span>
+                  Following: {currentUserData?.following?.length || 0}
+                </span>
               </div>
               {/* Favorite Posts Count */}
               <div className="mt-2">
-                <span>Favorite Posts: {currentUserData?.favoritePosts?.length || 0}</span>
+                <span>
+                  Favorite Posts: {currentUserData?.favoritePosts?.length || 0}
+                </span>
               </div>
             </div>
             {/* Verified Button */}
             <div className="mt-4">
               <Button
                 className={`px-4 py-2 rounded-lg ${
-                  currentUserData?.isVerified ===true 
-                    ? "bg-blue-500 text-white" 
+                  currentUserData?.isVerified === true
+                    ? "bg-blue-500 text-white"
                     : "bg-default-300 text-default-700 hover:bg-blue-400 hover:text-white"
                 }`}
-                onClick={handleUserVerify}
                 disabled={currentUserData.isVerified}
+                onClick={handleUserVerify}
               >
                 {currentUserData?.isVerified === true ? (
                   <>
@@ -131,17 +154,25 @@ console.log(currentUserData)
           <h3 className="text-2xl font-bold mb-4">Your Following</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {currentUserData?.following?.map((followingId: string) => {
-              const followingUser = otherUsers?.find((u: IUser) => u?._id === followingId);
+              const followingUser = otherUsers?.find(
+                (u: IUser) => u?._id === followingId,
+              );
+
               return followingUser ? (
-                <div key={followingUser?._id} className="bg-default-100 p-4 rounded-lg shadow-md flex items-center justify-between">
+                <div
+                  key={followingUser?._id}
+                  className="bg-default-100 p-4 rounded-lg shadow-md flex items-center justify-between"
+                >
                   <div className="flex items-center">
                     <Avatar
-                      src={followingUser?.profilePhoto}
-                      size="sm"
-                      className="rounded-full"
                       alt={`${followingUser?.name}'s profile`}
+                      className="rounded-full"
+                      size="sm"
+                      src={followingUser?.profilePhoto}
                     />
-                    <span className="ml-2 font-semibold">{followingUser?.name}</span>
+                    <span className="ml-2 font-semibold">
+                      {followingUser?.name}
+                    </span>
                   </div>
                 </div>
               ) : null;
@@ -155,18 +186,25 @@ console.log(currentUserData)
         <h3 className="text-2xl font-bold mb-4">People You May Follow</h3>
         <div className="grid grid-cols-1 gap-6">
           {otherUsers.map((otherUser: IUser) => (
-            <div key={otherUser?._id} className="bg-default-100 p-6 rounded-lg shadow-lg flex items-center justify-between">
+            <div
+              key={otherUser?._id}
+              className="bg-default-100 p-6 rounded-lg shadow-lg flex items-center justify-between"
+            >
               <div className="flex items-center">
                 {/* Profile Avatar with Verification */}
                 <div className="relative">
                   <Avatar
-                    src={otherUser?.profilePhoto}
-                    size="lg"
-                    className={`rounded-full ${otherUser?.isVerified===true ? "ring-4 ring-blue-500" : ""}`}
                     alt={`${otherUser?.name}'s profile`}
+                    className={`rounded-full ${otherUser?.isVerified === true ? "ring-4 ring-blue-500" : ""}`}
+                    size="lg"
+                    src={otherUser?.profilePhoto}
                   />
-                  {otherUser?.isVerified ===true && (
-                    <Badge className="absolute bottom-0 right-0" shape="circle" variant="flat">
+                  {otherUser?.isVerified === true && (
+                    <Badge
+                      className="absolute bottom-0 right-0"
+                      shape="circle"
+                      variant="flat"
+                    >
                       <BsCheckCircle className="text-blue-500" />
                     </Badge>
                   )}
@@ -178,17 +216,18 @@ console.log(currentUserData)
 
               {/* Follow/Unfollow Button */}
               <div className="flex items-center">
-                <Button 
-                  onClick={() => currentUserData?.following?.includes(otherUser?._id) 
-                    ? handleUnfollowAction(otherUser) 
-                    : handleFollowAction(otherUser)
-                  } 
+                <Button
                   className={`rounded-lg p-2 hover:shadow-lg ${
                     currentUserData?.following?.includes(otherUser?._id)
                       ? "bg-default-300 text-default-700"
                       : "bg-blue-500 text-white"
                   }`}
                   disabled={isFollowing || isUnfollowing}
+                  onClick={() =>
+                    currentUserData?.following?.includes(otherUser?._id)
+                      ? handleUnfollowAction(otherUser)
+                      : handleFollowAction(otherUser)
+                  }
                 >
                   {currentUserData?.following?.includes(otherUser?._id) ? (
                     <BsPersonDash className="w-5 h-5" />

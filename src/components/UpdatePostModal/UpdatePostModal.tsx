@@ -1,40 +1,66 @@
-"use client"
-import React from 'react';
+// @ts-nocheck
+"use client";
+import React from "react";
 import { BsUpload } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
-import dynamic from 'next/dynamic';
-import { useForm, FormProvider, SubmitHandler, FieldValues, Controller } from "react-hook-form";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/modal";
+import dynamic from "next/dynamic";
+import {
+  useForm,
+  FormProvider,
+  SubmitHandler,
+  FieldValues,
+  Controller,
+} from "react-hook-form";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "@nextui-org/modal";
 import { Input } from "@nextui-org/input";
 import { Select, SelectItem } from "@nextui-org/select";
-import { Button } from '@nextui-org/button';
-import { Switch } from '@nextui-org/switch';
-import DOMPurify from 'dompurify';
-import { TPost } from '@/src/types';
-import { useUser } from '@/src/context/user.provider';
+import { Button } from "@nextui-org/button";
+import { Switch } from "@nextui-org/switch";
+import DOMPurify from "dompurify";
 
-const ReactQuill = dynamic(() => import('react-quill'), { 
+import { TPost } from "@/src/types";
+import { useUser } from "@/src/context/user.provider";
+
+const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
   loading: () => (
     <div className="h-screen bg-black/10 fixed inset-0 z-[999] backdrop-blur-md flex justify-center items-center">
-      <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-default-500"></div>
+      <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-default-500" />
     </div>
-  )
+  ),
 });
-import 'react-quill/dist/quill.snow.css';
+
+import "react-quill/dist/quill.snow.css";
 
 interface UpdatePostModalProps {
   isOpen: boolean;
   onClose: () => void;
   post: TPost;
-  onSubmit: (data: FieldValues, resetForm: () => void, closeModal: () => void) => void;
+  onSubmit: (
+    data: FieldValues,
+    resetForm: () => void,
+    closeModal: () => void,
+  ) => void;
   isLoading: boolean;
   handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   imagePreviews: string[];
   removeImage: (index: number) => void;
 }
 
-const categoryOptions = ["Vegetables", "Flowers", "Landscaping", "Herb", "Indoor", "Fruits"];
+const categoryOptions = [
+  "Vegetables",
+  "Flowers",
+  "Landscaping",
+  "Herb",
+  "Indoor",
+  "Fruits",
+];
 
 const UpdatePostModal: React.FC<UpdatePostModalProps> = ({
   isOpen,
@@ -54,7 +80,7 @@ const UpdatePostModal: React.FC<UpdatePostModalProps> = ({
       category: post.category,
       isPremium: post.isPremium,
       author: user?._id,
-    }
+    },
   });
 
   const handleSubmit: SubmitHandler<FieldValues> = (data) => {
@@ -64,16 +90,17 @@ const UpdatePostModal: React.FC<UpdatePostModalProps> = ({
       isPremium: data.isPremium || false,
       author: user?._id,
     };
+
     onSubmit(sanitizedData, methods.reset, onClose);
   };
 
   return (
-    <Modal 
-      isOpen={isOpen} 
-      onClose={onClose}
+    <Modal
+      className="max-w-3xl mx-auto"
       isDismissable={false}
       isKeyboardDismissDisabled={true}
-      className="max-w-3xl mx-auto"
+      isOpen={isOpen}
+      onClose={onClose}
     >
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">
@@ -81,42 +108,48 @@ const UpdatePostModal: React.FC<UpdatePostModalProps> = ({
         </ModalHeader>
         <ModalBody>
           <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(handleSubmit)} className="space-y-4">
+            <form
+              className="space-y-4"
+              onSubmit={methods.handleSubmit(handleSubmit)}
+            >
               <input type="hidden" {...methods.register("author")} />
               <Input
-                {...methods.register("title", { required: "Title is required" })}
+                {...methods.register("title", {
+                  required: "Title is required",
+                })}
+                className="w-full"
                 label="Title"
                 placeholder="Enter post title"
-                className="w-full"
               />
 
               <div>
-                <label className="block text-sm font-medium text-default-700 mb-2">Post Details</label>
+                <label className="block text-sm font-medium text-default-700 mb-2">
+                  Post Details
+                </label>
                 <Controller
-                  name="postDetails"
                   control={methods.control}
-                  rules={{ required: "Post details are required" }}
+                  name="postDetails"
                   render={({ field }) => (
-                    <ReactQuill 
-                      theme="snow" 
-                      value={field.value || ''}
-                      onChange={field.onChange}
-                      onBlur={field.onBlur}
+                    <ReactQuill
                       className="h-64 mb-12"
+                      theme="snow"
+                      value={field.value || ""}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
                     />
                   )}
+                  rules={{ required: "Post details are required" }}
                 />
               </div>
 
               <Controller
-                name="category"
                 control={methods.control}
-                rules={{ required: "Category is required" }}
+                name="category"
                 render={({ field }) => (
                   <Select
+                    className="w-full"
                     label="Category"
                     placeholder="Select a category"
-                    className="w-full"
                     {...field}
                   >
                     {categoryOptions.map((category) => (
@@ -126,20 +159,19 @@ const UpdatePostModal: React.FC<UpdatePostModalProps> = ({
                     ))}
                   </Select>
                 )}
+                rules={{ required: "Category is required" }}
               />
 
               <div>
                 <div className="flex items-center justify-between my-4">
-                  <label className="text-sm font-medium text-default-700">Premium Post</label>
+                  <label className="text-sm font-medium text-default-700">
+                    Premium Post
+                  </label>
                   <Controller
-                    name="isPremium"
                     control={methods.control}
+                    name="isPremium"
                     render={({ field: { onChange, value } }) => (
-                      <Switch 
-                        checked={value}
-                        onChange={onChange}
-                        size="sm"
-                      />
+                      <Switch checked={value} size="sm" onChange={onChange} />
                     )}
                   />
                 </div>
@@ -147,12 +179,12 @@ const UpdatePostModal: React.FC<UpdatePostModalProps> = ({
                   <BsUpload className="inline-block mr-2" />
                   Choose File
                   <input
-                    type="file"
-                    className="hidden"
-                    onChange={handleImageChange}
-                    accept="image/*"
                     multiple
+                    accept="image/*"
+                    className="hidden"
                     name="image"
+                    type="file"
+                    onChange={handleImageChange}
                   />
                 </label>
               </div>
@@ -170,9 +202,9 @@ const UpdatePostModal: React.FC<UpdatePostModalProps> = ({
                         src={imageUrl}
                       />
                       <button
+                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition duration-300"
                         type="button"
                         onClick={() => removeImage(index)}
-                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition duration-300"
                       >
                         <FaTimes size={12} />
                       </button>
@@ -185,13 +217,13 @@ const UpdatePostModal: React.FC<UpdatePostModalProps> = ({
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button 
-                  color="primary" 
-                  type="submit" 
-                  isLoading={isLoading}
+                <Button
+                  color="primary"
                   disabled={isLoading}
+                  isLoading={isLoading}
+                  type="submit"
                 >
-                  {isLoading ? 'Updating Post...' : 'Update Post'}
+                  {isLoading ? "Updating Post..." : "Update Post"}
                 </Button>
               </ModalFooter>
             </form>

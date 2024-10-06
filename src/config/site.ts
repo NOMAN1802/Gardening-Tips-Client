@@ -2,7 +2,8 @@ export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
   name: "Planto",
-  description: "The Gardening Tips & Advice Platform is a comprehensive full-stack web application designed for gardening enthusiasts and professionals to share, discover, and engage with gardening knowledge.",
+  description:
+    "The Gardening Tips & Advice Platform is a comprehensive full-stack web application designed for gardening enthusiasts and professionals to share, discover, and engage with gardening knowledge.",
   navItems: [
     {
       label: "Home",
@@ -12,7 +13,7 @@ export const siteConfig = {
       label: "News Feed",
       href: "/posts",
     },
-    
+
     {
       label: "About Us",
       href: "/about",
@@ -20,7 +21,7 @@ export const siteConfig = {
     {
       label: "Contact Us",
       href: "/contact",
-    }
+    },
   ],
   navMenuItems: [
     {
@@ -31,7 +32,7 @@ export const siteConfig = {
       label: "News Feed",
       href: "/posts",
     },
-    
+
     {
       label: "About Us",
       href: "/about",
@@ -39,7 +40,6 @@ export const siteConfig = {
     {
       label: "Contact Us",
       href: "/contact",
-    }
+    },
   ],
-
 };

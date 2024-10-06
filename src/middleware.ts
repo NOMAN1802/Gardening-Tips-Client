@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
+
 import { getCurrentUser } from "./services/AuthService";
-
-
-
 
 const AuthRoutes = ["/login", "/register"];
 
@@ -14,11 +12,10 @@ const roleBasedRoutes = {
   ADMIN: [/^\/dashboard/],
 };
 
-
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  console.log(pathname);
+
 
   const user = await getCurrentUser();
 
@@ -27,7 +24,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     } else {
       return NextResponse.redirect(
-        new URL(`/login?redirect=${pathname}`, request.url)
+        new URL(`/login?redirect=${pathname}`, request.url),
       );
     }
   }
@@ -44,5 +41,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:page*','/profile/:page*','/login','/register'],
-}
+  matcher: ["/dashboard/:page*", "/profile/:page*", "/login", "/register"],
+};
