@@ -1,6 +1,7 @@
 import { IoBagAddSharp } from "react-icons/io5";
 import { MdManageAccounts, MdSettings } from "react-icons/md";
 import { FaBookmark, FaHome, FaUserEdit, FaUserFriends } from "react-icons/fa";
+import { GiMoneyStack } from "react-icons/gi";
 import { BsGearFill } from "react-icons/bs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -26,6 +27,7 @@ const iconMap = {
   BsGearFill: BsGearFill,
   FaBookmark: FaBookmark,
   FaUserEdit: FaUserEdit,
+  GiMoneyStack: GiMoneyStack,
 };
 
 const SidebarOptions = ({ links, closeSidebar }: Props) => {

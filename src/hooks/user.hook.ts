@@ -8,8 +8,10 @@ import {
   followUser,
   getAllUsers,
   getUserProfile,
+  myProfile,
   unfavoritePost,
   unfollowUser,
+  updateProfile,
   updateUserProfile,
   votePost,
 } from "../services/UserService";
@@ -221,5 +223,28 @@ export const useChangeUserStatus = () => {
     onError: (error) => {
       toast.error(error.message || "Failed to update user status");
     },
+  });
+};
+
+
+export const useUpdateProfile= () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<any, Error, {  formData: FormData }>({
+    mutationFn: ({  formData }) => updateProfile( formData),
+    onSuccess: (data) => {
+      toast.success("Profile update successfully");
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to update profile");
+    },
+  });
+};
+
+export const useMyProfile = () => {
+  return useQuery({
+    queryKey: ['userProfile'], 
+    queryFn: myProfile,   
   });
 };

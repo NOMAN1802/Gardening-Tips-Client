@@ -1,7 +1,7 @@
 "use client"
 import { useUser } from '@/src/context/user.provider';
 import { useGetAllPosts } from '@/src/hooks/post.hook';
-import { useGetUsers } from '@/src/hooks/user.hook';
+import { useGetUsers, useMyProfile } from '@/src/hooks/user.hook';
 import { Button } from '@nextui-org/button'; 
 import { Card } from '@nextui-org/card';     
 import { FC } from 'react';
@@ -9,9 +9,14 @@ import { BsArrowUpCircle } from 'react-icons/bs';
 
 const DashboardPage: FC = () => {
 
-    const{user} = useUser();
+    // const{user} = useUser();
     const { data: usersData, isLoading, refetch } = useGetUsers();
     const {data :posts} = useGetAllPosts();
+    const {data ,refetch:refetchMyProfile,isLoading: isMyProfileLoading} = useMyProfile();
+
+    const user = data?.data;
+
+
    
     const postCount = posts?.data?.posts?.length;
    

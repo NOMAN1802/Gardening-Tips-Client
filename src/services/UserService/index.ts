@@ -30,11 +30,11 @@ export const verifyUser = async (
 
     // console.log("Server response:", response.data);
 
-    // Check if the response has the expected structure
+    
     if (response.data && response.data.data && response.data.data.payment_url) {
       return { success: true, payment_url: response.data.data.payment_url };
     } else if (response.data && response.data.payment_url) {
-      // In case the payment_url is directly in the response data
+     
       return { success: true, payment_url: response.data.payment_url };
     } else {
       // console.error("Unexpected response structure:", response.data);
@@ -189,6 +189,46 @@ export const changeUserStatus = async (userId: string, status: string): Promise<
     console.error("Error updating user status:", error);
     throw new Error(
       error.response?.data?.message || error.message || "Failed to update user status"
+    );
+  }
+};
+
+
+
+export const updateProfile = async (formData: FormData): Promise<any> => {
+  try {
+    const { data } = await axiosInstance.patch(
+      '/profile',
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
+    );
+
+    if (data.success) {
+      return data;
+    } else {
+      throw new Error(data.message || "Failed to update Profile...");
+    }
+  } catch (error: any) {
+    console.error("Error updating profile:", error);
+    throw new Error(
+      error.response?.data?.message || error.message || "Failed to update profile",
+    );
+  }
+};
+
+
+export const myProfile = async () => {
+  try {
+    const response = await axiosInstance.get('/profile'); 
+    return response.data; 
+  } catch (error: any) {
+    console.error("Error fetching profile", error);
+    throw new Error(
+      error.response?.data?.message || error.message || "Failed to fetch profile",
     );
   }
 };

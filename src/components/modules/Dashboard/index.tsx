@@ -11,10 +11,13 @@ import { adminLinks, userLinks } from "./constants";
 
 import Container from "@/src/components/Container/Container";
 import { useUser } from "@/src/context/user.provider";
+import { useMyProfile } from "@/src/hooks/user.hook";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useUser();
+  const {data} = useMyProfile()
+  const currentUser = data?.data
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -83,10 +86,10 @@ const Sidebar = () => {
                 <img
                   alt="Profile"
                   className="w-16 h-16 rounded-full object-cover"
-                  src={user?.profilePhoto}
+                  src={currentUser?.profilePhoto}
                 />
                 <p className="mt-2 text-lg font-medium text-default-700">
-                  {user?.name}
+                  {currentUser?.name}
                 </p>
               </div>
               <SidebarOptions
@@ -144,10 +147,10 @@ const Sidebar = () => {
             <img
               alt="Profile"
               className="w-16 h-16 rounded-full object-cover"
-              src="/images/profile.jpg"
+              src={currentUser?.profilePhoto}
             />
             <p className="mt-2 text-lg font-medium text-default-700">
-              {user?.name}
+              {currentUser?.name}
             </p>
           </div>
           <SidebarOptions

@@ -17,6 +17,11 @@ export const adminLinks: LinkItem[] = [
     label: "Manage Users",
     icon: "FaUserEdit",
   },
+  {
+    href: "/dashboard/payment",
+    label: "Payment History",
+    icon: "GiMoneyStack",
+  },
 ];
 
 export const userLinks: LinkItem[] = [
