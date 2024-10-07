@@ -4,7 +4,6 @@ import { useGetAllPosts } from '@/src/hooks/post.hook';
 import { useGetUsers } from '@/src/hooks/user.hook';
 import { Button } from '@nextui-org/button'; 
 import { Card } from '@nextui-org/card';     
-import Image from 'next/image';
 import { FC } from 'react';
 import { BsArrowUpCircle } from 'react-icons/bs';
 
@@ -18,7 +17,7 @@ const DashboardPage: FC = () => {
    
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-default-100 p-8">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-default-100 p-8 rounded-md">
       
       {/* Main Hero Section */}
       <div className="w-full flex flex-col md:flex-row justify-between bg-default-200 rounded-lg shadow-xl p-6 relative">

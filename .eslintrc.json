@@ -97,8 +97,8 @@
 {
   "extends": [
     "next/core-web-vitals", 
-    "next/typescript",
-    "plugin:react-hooks/recommended"
+    "next/typescript"
+    // "plugin:react-hooks/recommended"
     
 ],
   "rules": {

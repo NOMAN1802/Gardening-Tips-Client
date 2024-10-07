@@ -1,6 +1,8 @@
 import axios from "axios";
 import envConfig from "@/src/config/envConfig";
 import axiosInstance from "@/src/lib/AxiosInstance";
+import { delay } from "@/src/utils/delay";
+import { revalidateTag } from 'next/cache';  
 
 
 export const createPost = async (formData: FormData): Promise<any> => {
@@ -233,13 +235,16 @@ export const getAllPostsClient = async() =>{
     
     }
 }
-export const getAllTrandingPosts = async (type?: string, category?: string) => {
-  let fetchOptions: RequestInit = {
-    method: "GET",
-    cache: "no-store",
-  };
 
-  if (type === "isr") {
+
+export const getAllTrandingPosts = async (type?: string, wait = false) => {
+  let fetchOptions = {};
+
+  if (type === "ssr") {
+    fetchOptions = {
+      cache: "no-store",
+    };
+  } else if (type === "isr") {
     fetchOptions = {
       next: {
         tags: ["posts"],
@@ -247,12 +252,20 @@ export const getAllTrandingPosts = async (type?: string, category?: string) => {
     };
   }
 
-  const url = new URL(`${envConfig.baseApi}/posts?sortBy=-upVoats&limit=4`);
-  const res = await fetch(url.toString(), fetchOptions);
+  const res = await fetch(
+    `${envConfig.baseApi}/posts?sortBy=-upVoats&limit=4`,
+    fetchOptions
+  );
 
   if (!res.ok) {
     throw new Error("Failed to fetch posts data");
   }
 
+  if (wait) {
+    delay(2000);
+  }
+
   return res.json();
 };
+
+

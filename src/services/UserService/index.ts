@@ -174,3 +174,21 @@ export const unfavoritePost = async (postId: string, userId: string) => {
     );
   }
 };
+
+
+export const changeUserStatus = async (userId: string, status: string): Promise<any> => {
+  try {
+    const { data } = await axiosInstance.put(`/users/changeStatus/${userId}`, { status });
+
+    if (data.success) {
+      return data;
+    } else {
+      throw new Error(data.message || "Failed to update user status");
+    }
+  } catch (error: any) {
+    console.error("Error updating user status:", error);
+    throw new Error(
+      error.response?.data?.message || error.message || "Failed to update user status"
+    );
+  }
+};

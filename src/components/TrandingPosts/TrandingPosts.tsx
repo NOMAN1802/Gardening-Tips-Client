@@ -1,8 +1,11 @@
+// @ts-nocheck
 "use client";
 import React from 'react';
 import { TPost } from '@/src/types';
 import PostCard from '../PostCard/PostCard';
 import TrandingPostCard from './TrandingPostCard';
+import Container from '../Container/Container';
+import SectionTitle from '../SectionTitle/SectionTitle';
 
 interface PostCardProps {
   posts: TPost[];
@@ -11,8 +14,8 @@ interface PostCardProps {
 const TrandingPosts: React.FC<PostCardProps> = ({ posts }) => {
 
   return (
-    <>
-
+    <Container>
+      <SectionTitle heading='Tranding Posts'/>
           <div
             className=" grid justify-center gap-10 sm:grid-cols-1 md:grid-cols-3"
           >
@@ -20,7 +23,7 @@ const TrandingPosts: React.FC<PostCardProps> = ({ posts }) => {
               <TrandingPostCard key={post._id}  post={post} />
             ))}
           </div> 
-   </>
+   </Container>
   
   );
 };

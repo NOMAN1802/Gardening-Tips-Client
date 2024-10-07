@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import {
+  changeUserStatus,
   favoritePost,
   followUser,
   getAllUsers,
@@ -204,4 +205,21 @@ export const usePostActions = () => {
     isFollowing: followUserMutation.isPending,
     isUnfollowing: unfollowUserMutation.isPending,
   };
+};
+export const useChangeUserStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<any, Error, { userId: string; status: string }>({
+    mutationFn: async ({ userId, status }) => {
+      const response = await changeUserStatus(userId, status);
+      return response;
+    },
+    onSuccess: () => {
+      toast.success("User status updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["users"] }); 
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to update user status");
+    },
+  });
 };
