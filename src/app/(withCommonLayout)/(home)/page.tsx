@@ -11,17 +11,24 @@ import Quotes from "@/src/components/Quotes/Quotes";
 
 const HomePage = async() => {
   const posts = await getAllTrandingPosts("isr");
-  console.log(posts)
+
   return (
     <div>
-       <Suspense fallback={<div className="text-center text-yellow-500">Loading Home Page...</div>}>
-        <Slider />
+      <Slider />
+      <Suspense fallback={<div className="text-center text-yellow-500">Loading Home Page...</div>}>
         <PostCategories />
-        <TrandingPosts posts={posts?.data?.posts} />
+        </Suspense>
+
+       <Suspense fallback={<div className="text-center text-yellow-500">Loading Home Page...</div>}>
+         <TrandingPosts posts={posts?.data?.posts} />
+        
+        </Suspense>
+        
         <RecentGardening />
         <Service/>
+        
         <Quotes/>
-      </Suspense>
+      
     </div>
   );
 };

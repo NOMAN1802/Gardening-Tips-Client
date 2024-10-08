@@ -212,7 +212,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post: initialPost, refetchPos
                   disabled={isVoting}
                   className="flex items-center space-x-2 cursor-pointer"
                 >
-                  <FaThumbsUp size={24} className={isUpvoted ? 'text-blue-600' : 'text-gray-400'} />
+                  <FaThumbsUp size={24} className={isUpvoted ? 'text-blue-600' : 'text-default-400'} />
                   <span>{post?.upVotes}</span>
                 </button>
                 <button 
@@ -220,7 +220,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post: initialPost, refetchPos
                   disabled={isVoting}
                   className="flex items-center space-x-2 cursor-pointer"
                 >
-                  <FaThumbsDown size={24} className={isDownvoted ? 'text-red-500' : 'text-gray-400'} />
+                  <FaThumbsDown size={24} className={isDownvoted ? 'text-red-500' : 'text-default-400'} />
                   <span>{post?.downVotes}</span>
                 </button>
 
@@ -233,7 +233,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post: initialPost, refetchPos
           <div className="w-full lg:w-2/5 lg:pl-6 space-y-10">
             <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
             <h2 className="text-2xl font-semibold mb-4">{post.category}</h2>
-            <p className="text-lg text-gray-700 mb-6" dangerouslySetInnerHTML={{ __html: sanitizedPostDetails }}></p>
+            <p className="text-lg text-default-700 mb-6" dangerouslySetInnerHTML={{ __html: sanitizedPostDetails }}></p>
 
             {/* Author Info */}
             <div className="flex items-center space-x-4 mb-6">
@@ -257,10 +257,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post: initialPost, refetchPos
               Download Post Details (PDF)
            </Button>
 
-            {/* Premium Post Indicator */}
-            <Chip color={post?.isPremium ? 'success' : 'default'} size="sm">
-                        {post?.isPremium ? 'Premium' : 'Free'}
-                      </Chip>
+            
         </div>
         {/* Comments Section */}
         <div className="my-6">

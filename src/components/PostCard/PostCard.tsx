@@ -138,13 +138,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, layout = "grid" ,postRefetch 
             <span>{post.downVotes}</span>
           </div>
         </div>
-        {/* <div className="flex justify-end w-full mt-4 px-2">
-          <Link href={`/posts/${post._id}`}>
-            <button className="py-2 px-4 text-sm font-medium text-default-600 border border-default-600 rounded-2xl hover:bg-default-600 hover:text-white transition-colors duration-200">
-              View Details
-            </button>
-          </Link>
-        </div> */}
+       
 <div className="flex justify-end w-full mt-4 px-2">
   <Link href={`/posts/${post._id}`}>
     <button
