@@ -12,14 +12,14 @@ const paymenttHistory = () => {
 
     const {data,isLoading} = usePaymentHistory();
     console.log(data?.data)
-    const paymentts = data?.data;
+    const payments = data?.data;
   return (
     <Container>
     <PageTitle heading="paymentt History" subHeading="paymentt list of verified payments" />
     <div className="w-full overflow-x-auto">
       {isLoading ? (
         <Loading />
-      ) : paymentts?.length ? (
+      ) : payments?.length ? (
         <>
           <Table aria-label="All payments" className="min-w-full">
             <TableHeader>
@@ -31,7 +31,7 @@ const paymenttHistory = () => {
               
             </TableHeader>
             <TableBody>
-              {paymentts?.map((payment: any) => (
+              {payments?.map((payment: any) => (
                 <TableRow key={payment?._id}>
                   <TableCell className="hidden md:table-cell">
                     <Avatar src={payment?.userId?.profilePhoto} 

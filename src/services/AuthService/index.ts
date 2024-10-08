@@ -3,10 +3,8 @@
 import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
 import { jwtDecode } from "jwt-decode";
-
 import axiosInstance from "@/src/lib/AxiosInstance";
-import { ChangePasswordPayload } from "@/src/types";
-import { revalidateTag } from "next/cache";
+
 
 export const registerUser = async (userData: FieldValues) => {
   try {
@@ -82,22 +80,5 @@ export const getNewAccessToken = async () => {
     return res.data;
   } catch (error) {
     throw new Error("Failed to get new access token");
-  }
-};
-
-export const changePassword = async (formData: FormData): Promise<any> => {
-  try {
-    const { data } = await axiosInstance.post("/auth/change-password", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    revalidateTag("auth");
-
-    return data;
-  } catch (error) {
-    console.log(error);
-    throw new Error("Failed to change password");
   }
 };
