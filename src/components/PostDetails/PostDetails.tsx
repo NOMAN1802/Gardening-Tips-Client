@@ -12,6 +12,8 @@ import { useUser } from '@/src/context/user.provider';
 import { useEditComment, useDeleteComment } from '@/src/hooks/post.hook';
 import { Button } from "@nextui-org/button";
 import { toast } from "sonner";
+import jsPDF from 'jspdf';
+import { Chip } from '@nextui-org/chip';
 
 
 interface Comment {
@@ -138,6 +140,33 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post: initialPost, refetchPos
   const isUpvoted = user?._id && post.upvotedBy?.includes(user._id);
   const isDownvoted = user?._id && post.downvotedBy?.includes(user._id);
 
+  const generatePDF = () => {
+    const doc = new jsPDF();
+    
+    // Add post title
+    doc.setFontSize(18);
+    doc.text(post.title, 20, 20);
+    
+    // Add post category
+    doc.setFontSize(14);
+    doc.text(`Category: ${post.category}`, 20, 30);
+    
+    // Add post details
+    doc.setFontSize(12);
+    const splitText = doc.splitTextToSize(post.postDetails, 180);
+    doc.text(splitText, 20, 40);
+    
+    // Add author info
+    doc.setFontSize(14);
+    doc.text('Author Information:', 20, doc.internal.pageSize.height - 40);
+    doc.setFontSize(12);
+    doc.text(`Name: ${post.author.name}`, 20, doc.internal.pageSize.height - 30);
+    doc.text(`Email: ${post.author.email}`, 20, doc.internal.pageSize.height - 20);
+    
+    // Save the PDF
+    doc.save(`${post.title}.pdf`);
+  };
+
   return (
     <>
       <PageTitle heading={post.title} subHeading={`Learn more about ${post.category}`}/>
@@ -151,7 +180,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post: initialPost, refetchPos
                 src={selectedImage}
                 alt={post.title}
                 width={600}
-                height={600}
+                height={500}
                 className="rounded-lg shadow-lg"
               />
             </div>
@@ -221,13 +250,17 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post: initialPost, refetchPos
               </div>
             </div>
 
-            {/* Premium Post Indicator */}
-            {post.isPremium && (
-              <div className="text-md text-yellow-500 font-bold mb-4">
-                This is a premium post
-              </div>
-            )}
+         
           </div>
+             {/* Download PDF Button */}
+             <Button onClick={generatePDF} color="default">
+              Download Post Details (PDF)
+           </Button>
+
+            {/* Premium Post Indicator */}
+            <Chip color={post?.isPremium ? 'success' : 'default'} size="sm">
+                        {post?.isPremium ? 'Premium' : 'Free'}
+                      </Chip>
         </div>
         {/* Comments Section */}
         <div className="my-6">
