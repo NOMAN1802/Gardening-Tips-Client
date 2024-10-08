@@ -1,4 +1,4 @@
-#Planto
+Planto
 
 Planto is a Gardening Tips & Advice Platform is a comprehensive full-stack web application designed for gardening enthusiasts and professionals to share, discover, and engage with gardening knowledge. It will provide users with insightful tips, plant care advice, seasonal guides, and techniques to enhance their gardening experiences.
 
