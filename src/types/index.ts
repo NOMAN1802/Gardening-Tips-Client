@@ -79,3 +79,7 @@ export interface PostResponse {
     limit: number;
   };
 }
+export interface ChangePasswordPayload {
+  oldPassword: string;
+  newPassword: string;
+}

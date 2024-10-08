@@ -5,7 +5,8 @@ import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button"; 
 import { BsUpload } from "react-icons/bs";
 import { FaTimes } from "react-icons/fa";
-import { useGetUsers, useMyProfile, useUpdateProfile } from "@/src/hooks/user.hook";
+import {  useMyProfile, useUpdateProfile } from "@/src/hooks/user.hook";
+import SectionTitle from "@/src/components/SectionTitle/SectionTitle";
 
 const ProfileSettingForm = () => {
 
@@ -67,70 +68,74 @@ const ProfileSettingForm = () => {
 
 
   return (
+   <>
+   <SectionTitle heading="Update profile"/>
     <div className="flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center shadow-md rounded-lg bg-default-100">
-      <div className="w-full max-w-3xl p-8 bg-default-300 rounded-lg shadow-lg">
-        <h3 className="text-2xl font-bold my-6 text-center">Update Profile</h3>
-
-        <FormProvider {...methods}>
-          <form className="space-y-6" onSubmit={methods.handleSubmit(handleUpdateSubmit)}>
-            <Input
-              {...methods.register("name", { required: "Name is required" })}
-              label="Name"
-              placeholder="Enter your name"
-              className="w-full"
-            />
-            <Input
-              {...methods.register("mobileNumber", { required: "Mobile Number is required" })}
-              label="Mobile Number"
-              placeholder="Enter your mobile number"
-              className="w-full"
-            />
-            <div className="mt-4">
-              <label className="cursor-pointer bg-default-500 text-white py-3 px-6 rounded-md hover:bg-default-600 transition duration-300">
-                <BsUpload className="inline-block mr-2" />
-                Choose Profile Photo
-                <input
-                  accept="image/*"
-                  className="hidden"
-                  name="profilePhoto"
-                  type="file"
-                  onChange={handleImageChange}
-                />
-              </label>
-            </div>
-            {imagePreviews && (
-              <div className="relative my-5">
-                <div className="size-48 rounded-xl border-2 border-dashed border-default-300 p-2">
-                  <img
-                    alt="Profile Photo"
-                    className="h-full w-full object-cover object-center rounded-md"
-                    src={imagePreviews}
+        
+        <div className="w-full max-w-3xl p-8 bg-default-300 rounded-lg shadow-lg">
+          
+  
+          <FormProvider {...methods}>
+            <form className="space-y-6" onSubmit={methods.handleSubmit(handleUpdateSubmit)}>
+              <Input
+                {...methods.register("name", { required: "Name is required" })}
+                label="Name"
+                placeholder="Enter your name"
+                className="w-full"
+              />
+              <Input
+                {...methods.register("mobileNumber", { required: "Mobile Number is required" })}
+                label="Mobile Number"
+                placeholder="Enter your mobile number"
+                className="w-full"
+              />
+              <div className="mt-4">
+                <label className="cursor-pointer bg-default-500 text-white py-3 px-6 rounded-md hover:bg-default-600 transition duration-300">
+                  <BsUpload className="inline-block mr-2" />
+                  Choose Profile Photo
+                  <input
+                    accept="image/*"
+                    className="hidden"
+                    name="profilePhoto"
+                    type="file"
+                    onChange={handleImageChange}
                   />
-                  <button
-                    className="absolute top-1 right-1 bg-default-800 text-white rounded-full p-1 hover:bg-default-600 transition duration-300"
-                    type="button"
-                    onClick={removeImage}
-                  >
-                    <FaTimes size={12} />
-                  </button>
-                </div>
+                </label>
               </div>
-            )}
-            <div className="flex justify-center">
-              <Button
-                className="w-2/3 py-3 mx-auto"
-                color="default"
-                disabled={isLoading} 
-                isLoading={isLoading} 
-                type="submit"
-              >
-                {isLoading ? "Updating..." : "Update Profile"}
-              </Button>
-            </div>
-          </form>
-        </FormProvider>
+              {imagePreviews && (
+                <div className="relative my-5">
+                  <div className="size-48 rounded-xl border-2 border-dashed border-default-300 p-2">
+                    <img
+                      alt="Profile Photo"
+                      className="h-full w-full object-cover object-center rounded-md"
+                      src={imagePreviews}
+                    />
+                    <button
+                      className="absolute top-1 right-1 bg-default-800 text-white rounded-full p-1 hover:bg-default-600 transition duration-300"
+                      type="button"
+                      onClick={removeImage}
+                    >
+                      <FaTimes size={12} />
+                    </button>
+                  </div>
+                </div>
+              )}
+              <div className="flex justify-center">
+                <Button
+                  className="w-2/3 py-3 mx-auto"
+                  color="default"
+                  disabled={isLoading} 
+                  isLoading={isLoading} 
+                  type="submit"
+                >
+                  {isLoading ? "Updating..." : "Update Profile"}
+                </Button>
+              </div>
+            </form>
+          </FormProvider>
+        </div>
       </div>
-    </div>
+   </>
   );
 };
 

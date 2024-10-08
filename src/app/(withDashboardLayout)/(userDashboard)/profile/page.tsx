@@ -16,6 +16,8 @@ import { useUser } from "@/src/context/user.provider";
 import { useGetUsers, usePostActions } from "@/src/hooks/user.hook";
 import { IUser } from "@/src/types";
 import { verifyUser } from "@/src/services/UserService";
+import PageTitle from "@/src/components/PageTitle/PageTitle";
+import { FaMailBulk } from "react-icons/fa";
 
 const UserProfilePage = () => {
   const { user } = useUser();
@@ -74,6 +76,8 @@ const UserProfilePage = () => {
   console.log(currentUserData);
 
   return (
+   <> 
+   <PageTitle heading="My Profile" subHeading="info"/>
     <div className="flex flex-col sm:flex-row">
       {/* Left Side - Profile Section */}
       <div className="flex-1 p-6 text-default-900 bg-default-100 rounded-md">
@@ -105,9 +109,9 @@ const UserProfilePage = () => {
               </h2>
               {/* Upvote Count */}
               <div className="mt-2 flex items-center">
-                <BsArrowUpCircle className="text-green-500 w-5 h-5" />
+                <FaMailBulk className="text-green-500 w-5 h-5" />
                 <span className="ml-2 text-default-600">
-                  Upvotes: {currentUserData?.upVoteCount || 0}
+                  email: {currentUserData?.email}
                 </span>
               </div>
               {/* Followers and Following Count */}
@@ -241,6 +245,7 @@ const UserProfilePage = () => {
         </div>
       </div>
     </div>
+   </>
   );
 };
 

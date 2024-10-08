@@ -1,5 +1,4 @@
 "use client"
-import { useUser } from '@/src/context/user.provider';
 import { useGetAllPosts } from '@/src/hooks/post.hook';
 import { useGetUsers, useMyProfile } from '@/src/hooks/user.hook';
 import { Button } from '@nextui-org/button'; 

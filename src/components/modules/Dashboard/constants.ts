@@ -22,6 +22,7 @@ export const adminLinks: LinkItem[] = [
     label: "Payment History",
     icon: "GiMoneyStack",
   },
+ 
 ];
 
 export const userLinks: LinkItem[] = [
@@ -39,5 +40,10 @@ export const userLinks: LinkItem[] = [
     href: "/profile/my-favorites",
     label: "My Favorites",
     icon: "FaBookmark",
+  },
+  {
+    href: "/profile/change-password",
+    label: "Password Change",
+    icon: "FaShieldAlt",
   },
 ];
