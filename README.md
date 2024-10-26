@@ -1,8 +1,34 @@
-# Next.js & NextUI Template
+Planto
 
-This is a template for creating applications using Next.js 14 (app directory) and NextUI (v2).
+Planto is a Gardening Tips & Advice Platform is a comprehensive full-stack web application designed for gardening enthusiasts and professionals to share, discover, and engage with gardening knowledge. It will provide users with insightful tips, plant care advice, seasonal guides, and techniques to enhance their gardening experiences.
 
 [Try it on CodeSandbox](https://githubbox.com/nextui-org/next-app-template)
+
+- In this alog  system there are two type of user 
+
+```bash
+  Admin
+```
+```bash
+  User
+```
+#### Admin
+
+- Admin can Manage user.
+- Admin can Manage blog
+- Admin can Upgate profile
+
+
+#### User
+
+- user can create blog in different categories.
+- user can varified by purchag a verified member ship
+- user can update own profile
+- user can change passsword
+- follow unfollow
+- upvote down vote
+  
+  
 
 ## Technologies Used
 
@@ -42,9 +68,6 @@ npm run dev
 
 If you are using `pnpm`, you need to add the following code to your `.npmrc` file:
 
-```bash
-public-hoist-pattern[]=*@nextui-org/*
-```
 
 After modifying the `.npmrc` file, you need to run `pnpm install` again to ensure that the dependencies are installed correctly.
 
