@@ -98,7 +98,7 @@ const MyPosts = () => {
   };
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full overflow-x">
       {isLoadingPosts ? (
         <Loading />
       ) : myPosts?.data?.length ? (

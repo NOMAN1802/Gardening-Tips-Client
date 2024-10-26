@@ -1,3 +1,4 @@
+"use client";
 import { Skeleton } from '@nextui-org/skeleton';
 
 interface PostCardSkeletonProps {

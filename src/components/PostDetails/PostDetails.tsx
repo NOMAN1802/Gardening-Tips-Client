@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { FaThumbsUp, FaThumbsDown, FaRegUser, FaRegTrashAlt, FaEdit } from 'react-icons/fa';
 import { AiOutlineMessage } from 'react-icons/ai';
 import { TPost } from '@/src/types';
-import PageTitle from '../PageTitle/PageTitle';
 import CommentSection from '../Comment/Comment';
 import DOMPurify from 'dompurify';
 import { usePostActions } from '@/src/hooks/user.hook';
@@ -13,7 +12,7 @@ import { useEditComment, useDeleteComment } from '@/src/hooks/post.hook';
 import { Button } from "@nextui-org/button";
 import { toast } from "sonner";
 import jsPDF from 'jspdf';
-import { Chip } from '@nextui-org/chip';
+import {motion} from "framer-motion"
 
 
 interface Comment {
@@ -169,19 +168,33 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post: initialPost, refetchPos
 
   return (
     <>
-      <PageTitle heading={post.title} subHeading={`Learn more about ${post.category}`}/>
-      <div className="container mx-auto py-10 px-6">
-        <div className="flex flex-col lg:flex-row">
+
+      
+      <motion.div
+        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 50 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="mx-auto text-center md:w-4/12 my-[60px]">
+          <h3 className="text-4xl  text-default-900 py-4">{post.title}</h3>
+          <p className="text-center mt-2 italic text-default-600">
+          {`Learn more about ${post.category}`}
+          </p>
+        </div>
+      </motion.div>
+      <div className="mx-auto py-10 px-6">
+        <div className="flex flex-col gap-6 lg:flex-row">
           {/* Image Section */}
-          <div className="w-full lg:w-1/2 mb-6 lg:mb-0">
+          <div className="w-full h-2/3 mb-6 lg:mb-0">
             {/* Main Image */}
             <div className="mb-4">
               <Image
                 src={selectedImage}
                 alt={post.title}
-                width={600}
+                width={700}
                 height={500}
-                className="rounded-lg shadow-lg"
+                className="rounded-lg shadow-lg object-cover" 
+                style={{ maxHeight: '550px', width: '100%', height: 'auto' }}
               />
             </div>
 
@@ -228,9 +241,14 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post: initialPost, refetchPos
               </div>
             </div>
           </div>
-
+         
           {/* Post Details and Author Info */}
-          <div className="w-full lg:w-2/5 lg:pl-6 space-y-10">
+          <div className="w-full lg:pl-6 space-y-10">
+            {/* Download PDF Button */}
+            <Button onClick={generatePDF} color="default">
+              Download Post Details (PDF)
+           </Button>
+
             <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
             <h2 className="text-2xl font-semibold mb-4">{post.category}</h2>
             <p className="text-lg text-default-700 mb-6" dangerouslySetInnerHTML={{ __html: sanitizedPostDetails }}></p>
@@ -252,11 +270,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post: initialPost, refetchPos
 
          
           </div>
-             {/* Download PDF Button */}
-             <Button onClick={generatePDF} color="default">
-              Download Post Details (PDF)
-           </Button>
-
+           
             
         </div>
         {/* Comments Section */}

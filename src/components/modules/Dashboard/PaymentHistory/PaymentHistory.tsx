@@ -2,6 +2,7 @@
 import Container from '@/src/components/Container/Container'
 import Loading from '@/src/components/Loading/Loading'
 import PageTitle from '@/src/components/PageTitle/PageTitle'
+import SectionTitle from '@/src/components/SectionTitle/SectionTitle'
 import { usePaymentHistory } from '@/src/hooks/payment.hook'
 import { Avatar } from '@nextui-org/avatar'
 import { Chip } from '@nextui-org/chip'
@@ -14,13 +15,16 @@ const paymenttHistory = () => {
     console.log(data?.data)
     const payments = data?.data;
   return (
-    <Container>
-    <PageTitle heading="paymentt History" subHeading="paymentt list of verified payments" />
-    <div className="w-full overflow-x-auto">
+    <>
+    <PageTitle heading="Payments" subHeading="List of verified payments" />
+     <Container>
+    
+    <div className="w-full overflow-x">
       {isLoading ? (
         <Loading />
       ) : payments?.length ? (
         <>
+        <SectionTitle heading="Payments List"/>
           <Table aria-label="All payments" className="min-w-full">
             <TableHeader>
               <TableColumn className="hidden md:table-cell">IMAGE</TableColumn>
@@ -65,6 +69,8 @@ const paymenttHistory = () => {
       )}
     </div>
   </Container>
+    </>
+   
   )
 }
 

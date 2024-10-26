@@ -4,7 +4,7 @@ import { useForm, FormProvider, FieldValues } from "react-hook-form";
 import { Input } from "@nextui-org/input"; 
 import { Button } from "@nextui-org/button"; 
 import { BsUpload } from "react-icons/bs";
-import { FaTimes } from "react-icons/fa";
+import { FaSync, FaTimes } from "react-icons/fa";
 import {  useMyProfile, useUpdateProfile } from "@/src/hooks/user.hook";
 import SectionTitle from "@/src/components/SectionTitle/SectionTitle";
 
@@ -69,10 +69,11 @@ const ProfileSettingForm = () => {
 
   return (
    <>
+   
    <SectionTitle heading="Update profile"/>
-    <div className="flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center shadow-md rounded-lg bg-default-100">
+    <div className="flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center shadow-md rounded-lg bg-default-200">
         
-        <div className="w-full max-w-3xl p-8 bg-default-300 rounded-lg shadow-lg">
+        <div className="w-full max-w-3xl p-8 bg-default-200 rounded-lg shadow-lg">
           
   
           <FormProvider {...methods}>
@@ -122,12 +123,13 @@ const ProfileSettingForm = () => {
               )}
               <div className="flex justify-center">
                 <Button
-                  className="w-2/3 py-3 mx-auto"
-                  color="default"
+                  className="w-2/3 py-3 mx-auto bg-default-500 text-white"
+                  
                   disabled={isLoading} 
                   isLoading={isLoading} 
                   type="submit"
                 >
+                  <FaSync size={12} />
                   {isLoading ? "Updating..." : "Update Profile"}
                 </Button>
               </div>

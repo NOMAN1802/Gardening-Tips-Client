@@ -17,6 +17,8 @@ import {
 } from 'chart.js';
 import { IUser } from '@/src/types';
 import { usePaymentHistory } from '@/src/hooks/payment.hook';
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/table';
+import { Avatar } from '@nextui-org/avatar';
 
 ChartJS.register(
   CategoryScale, 
@@ -32,12 +34,12 @@ const DashboardPage: FC = () => {
     const { data: posts } = useGetAllPosts();
     const { data, refetch: refetchMyProfile, isLoading: isMyProfileLoading } = useMyProfile();
     const {data :payment,} = usePaymentHistory();
-    console.log(data?.data)
     const payments = payment?.data;
     console.log(payments)
     const user = data?.data;
     const postCount = posts?.data?.posts?.length;
-    
+    const followers = data?.data?.followers;
+    console.log('followers...',followers)
 
     // Calculate total users and verified users
     const totalUsers = usersData?.data?.length || 0;
@@ -92,10 +94,10 @@ const DashboardPage: FC = () => {
        <div className="w-full flex flex-col md:flex-row justify-between bg-default-200 rounded-lg shadow-xl p-6 relative">
         <div>
           <h2 className="text-default-500 text-3xl font-bold">
-          PlantO" is a blog dedicated
+          Planto is a blog dedicated
           </h2>
           <p className="text-default-500 mt-2">
-           to sharing expert gardening tips, advice, and techniques to help you grow a thriving garden.
+           to sharing expert gardening tips, advice, and techniques to help you grow <br /> a thriving garden.
           </p>
            <Button className="mt-4 bg-default-400 text-default-500 hover:bg-default-600">
              Exclusive on Planto
@@ -161,6 +163,45 @@ const DashboardPage: FC = () => {
                     </div>
                 </Card>
             </div>
+
+        
+        {/* Followers Section */}
+      
+  <div className="w-full sm:p-4 md:p-0 mt-10">
+  <h3 className="text-2xl font-bold mb-4 ">Your Followers</h3>
+  <Table>
+    <TableHeader>
+      <TableColumn>Image</TableColumn>
+      <TableColumn>Name</TableColumn>
+      <TableColumn className='hidden md:table-cell'>Email</TableColumn>
+      <TableColumn className='hidden md:table-cell'>Verified</TableColumn>
+      
+    </TableHeader>
+    <TableBody>
+      {followers?.map((follower :IUser) => {
+        
+
+        return follower ? (
+          <TableRow key={follower?._id}>
+
+          <TableCell>
+              <Avatar
+                alt={`${follower?.name}'s profile`}
+                className="rounded-full"
+                size="sm"
+                src={follower?.profilePhoto}
+              />
+            </TableCell>
+            <TableCell>{follower?.name}</TableCell>
+            <TableCell className='hidden md:table-cell text-sm'>{follower?.email}</TableCell>
+            <TableCell className='hidden md:table-cell text-sm'>{follower?.isVerified ? "Yes" : "No"}</TableCell>
+           
+          </TableRow>
+        ) : null;
+      })}
+    </TableBody>
+  </Table>
+</div>
         </div>
     );
 };

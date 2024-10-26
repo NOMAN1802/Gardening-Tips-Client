@@ -3,6 +3,7 @@ import Container from '@/src/components/Container/Container';
 import DeletePostModal from '@/src/components/DeletePostModal/DeletePostModal';
 import Loading from '@/src/components/Loading/Loading';
 import PageTitle from '@/src/components/PageTitle/PageTitle';
+import SectionTitle from '@/src/components/SectionTitle/SectionTitle';
 import { useDeletePost, useGetAllPosts } from '@/src/hooks/post.hook';
 import { getAllPosts } from '@/src/services/PostService';
 import { TPost } from '@/src/types';
@@ -42,14 +43,18 @@ const ManagePosts = () => {
 
   
   return (
+    <>
+    <PageTitle heading='Manage posts' subHeading='Post Management'/>
     <Container>
-      <PageTitle heading='Manage posts' subHeading='Admin Post Management '/>
-      <div className="w-full overflow-x-auto">
+      
+      <div className="w-full overflow-x">
         {isLoadingPosts ? (
           <Loading /> 
         ) : posts?.data?.posts?.length ? (
           <>
-            <Table aria-label="Manage Posts" className="min-w-full">
+          <SectionTitle heading="Posts List"/>
+          
+            <Table aria-label="Manage Posts" className="container min-w-full">
               <TableHeader>
                 <TableColumn className="hidden md:table-cell">IMAGE</TableColumn>
                 <TableColumn>TITLE</TableColumn>
@@ -130,6 +135,8 @@ const ManagePosts = () => {
         )}
       </div>
     </Container>
+    </>
+    
   );
 };
 

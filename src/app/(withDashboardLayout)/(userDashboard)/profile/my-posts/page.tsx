@@ -7,6 +7,8 @@ import { toast } from 'sonner';
 import { FieldValues } from "react-hook-form";
 import PageTitle from '@/src/components/PageTitle/PageTitle';
 import MyPosts from '@/src/components/MyPosts/MyPosts';
+import Container from '@/src/components/Container/Container';
+
 
 
 const MyPostsPage = () => {
@@ -63,28 +65,36 @@ const MyPostsPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <PageTitle heading='My Added Posts' subHeading='Manage and create your posts'/>
-        <div className="mt-6">
-          <AddPostModal
-            buttonText="Create New Post"
-            title="Create New Post"
-            buttonVariant="solid"
-            buttonClassName="bg-gradient-to-r from-default-500 to-purple-500 text-white px-6 py-3 rounded-full shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1"
-            onSubmit={onSubmitForm}
-            handleImageChange={handleImageChange}
-            imagePreviews={imagePreviews}
-            isLoading={isPending}
-          />
-        </div>
-      </div>
-      
-      <div className="bg-default-100 shadow-md rounded-lg p-6">
-        <h2 className="text-2xl font-bold mb-4">My Posts</h2>
-        <MyPosts />
-      </div>
+    <>
+     <PageTitle heading='Added Posts' subHeading='Add and manage your posts'/>
+     <Container>
+     
+     <div className="mx-auto px-4 py-8">
+     
+       <div className="mt-6">
+       <div className="md:w-8/12 my-12">
+      <h3 className="text-4xl uppercase py-4">Add & Manage Posts</h3>
     </div>
+         <AddPostModal
+           buttonText="Create New Post"
+           title="Create New Post"
+           buttonVariant="solid"
+           buttonClassName="bg-gradient-to-r from-default-500 to-purple-500 text-white px-6 py-3 rounded-full shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1"
+           onSubmit={onSubmitForm}
+           handleImageChange={handleImageChange}
+           imagePreviews={imagePreviews}
+           isLoading={isPending}
+         />
+       </div>
+     </div>
+     
+     <div className="bg-default-100 shadow-md rounded-lg">
+    
+       <MyPosts />
+     </div>
+   </Container>
+    </>
+
   )
 }
 

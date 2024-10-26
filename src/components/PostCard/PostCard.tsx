@@ -9,6 +9,7 @@ import { FaThumbsUp, FaThumbsDown, FaHeart, FaRegHeart } from "react-icons/fa";
 import { useGetUsers, usePostActions } from '@/src/hooks/user.hook';
 import { useUser } from '@/src/context/user.provider';
 import { Chip } from '@nextui-org/chip';
+import Loading from '../Loading/Loading';
 
 interface PostCardProps {
   post: TPost;
@@ -57,26 +58,22 @@ const PostCard: React.FC<PostCardProps> = ({ post, layout = "grid" ,postRefetch 
     try {
       await handleUnFavorite(postId);
       refetch();
-      // postRefetch();
     } catch (error) {
       console.error("Unfavorite error:", error);
     }
   };
 
-  if (isLoading || !currentUserData) {
-    return  <div className="h-screen bg-black/10 fixed inset-0 z-[999] backdrop-blur-md flex justify-center items-center">
-    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-default-500" />
-  </div>;
-  }
 
-  const isPostFavorited = currentUserData.favoritesPosts?.includes(post._id);
+  const isPostFavorited = currentUserData?.favoritesPosts?.includes(post._id);
 
   return (
+   <>
+   {isLoading && <Loading />}
     <div className={`bg-default-100 relative rounded overflow-hidden shadow-xl transform hover:scale-105 duration-300 -right-1 -skew-x-2 ${layout === "list" ? "flex space-x-4 p-4" : ""}`}>
       <div className={`relative ${layout === "list" ? "w-40 h-40" : "w-full h-80 mb-4"} group`}>
         <Image
-          src={post.images[0]}
-          alt={post.title}
+          src={post?.images[0]}
+          alt={post?.title}
           fill
           sizes={layout === "list" ? "15vw" : "25vw"}
           className="absolute object-cover rounded-md transition-opacity ease-in-out duration-500"
@@ -84,8 +81,8 @@ const PostCard: React.FC<PostCardProps> = ({ post, layout = "grid" ,postRefetch 
 
         <button
           onClick={() => isPostFavorited
-            ? handleUnFavoriteAction(post._id)
-            : handleFavoriteAction(post._id)
+            ? handleUnFavoriteAction(post?._id)
+            : handleFavoriteAction(post?._id)
           }
           className={`absolute top-4 right-4 p-2 rounded-full shadow-lg hover:shadow-xl transition ${
             isPostFavorited
@@ -120,43 +117,44 @@ const PostCard: React.FC<PostCardProps> = ({ post, layout = "grid" ,postRefetch 
         </div>
         <div className="flex items-center gap-2 mx-2 mt-4">
           <Image
-            src={post.author.profilePhoto}
+            src={post?.author?.profilePhoto}
             alt={post.author.name}
             width={32}
             height={32}
             className="rounded-full"
           />
-          <div className="text-sm text-gray-700">{post.author.name}</div>
+          <div className="text-sm text-gray-700">{post?.author?.name}</div>
         </div>
         <div className="flex items-center justify-between w-full mt-4">
           <div className="flex items-center gap-2 text-gray-500 text-sm mx-2">
             <FaThumbsUp className="text-green-500" />
-            <span>{post.upVotes}</span>
+            <span>{post?.upVotes}</span>
           </div>
           <div className="flex items-center gap-2 text-gray-500 text-sm mx-2">
             <FaThumbsDown className="text-red-500" />
-            <span>{post.downVotes}</span>
+            <span>{post?.downVotes}</span>
           </div>
         </div>
        
 <div className="flex justify-end w-full mt-4 px-2">
-  <Link href={`/posts/${post._id}`}>
+  <Link href={`/posts/${post?._id}`}>
     <button
       className={`py-2 px-4 text-sm font-medium border rounded-2xl transition-colors duration-200 
       ${
-        !currentUserData.isVerified && post.isPremium
+        !currentUserData?.isVerified && post?.isPremium
           ? "text-white bg-red-500 cursor-not-allowed" 
           : "text-default-600 border-default-600 hover:bg-default-600 hover:text-white" 
       }`}
-      disabled={!currentUserData.isVerified && post.isPremium} 
+      disabled={!currentUserData?.isVerified && post?.isPremium} 
     >
-      {post.isPremium ? "Premium Content" : "View Details"}
+      {post?.isPremium ? "Premium Content" : "View Details"}
     </button>
   </Link>
 </div>
 
       </div>
     </div>
+   </>
   );
 };
 

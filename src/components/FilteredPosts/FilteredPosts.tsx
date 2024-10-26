@@ -1,19 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FaThLarge, FaThList, FaFilter } from "react-icons/fa";
-
+import { FaFilter } from "react-icons/fa";
 import PostCard from "@/src/components/PostCard/PostCard";
 import { TPost } from "@/src/types";
+import Container from "../Container/Container";
+import { Avatar } from "@nextui-org/avatar";
+import { Badge } from "@nextui-org/badge";
+import { BsCheckCircle } from "react-icons/bs";
 
 interface FiltersPostsProps {
   posts: TPost[];
-  
 }
 
 const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts }) => {
   const [filteredPosts, setFilteredPosts] = useState<TPost[]>(posts);
-  const [layout, setLayout] = useState<"grid" | "list">("grid");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [minUpvotes, setMinUpvotes] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
@@ -37,7 +38,7 @@ const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts }) => {
         (post) =>
           post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
           post.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          post.author.name.toLowerCase().includes(searchQuery.toLowerCase()),
+          post.author.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
@@ -54,15 +55,60 @@ const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts }) => {
     handleFilter();
   }, [selectedCategory, minUpvotes, searchQuery]);
 
-  const FilterSection = () => (
-    <div
-      className={`bg-default-100 rounded-lg p-4 ${showFilters ? "block" : "hidden md:block"}`}
+  const getUserPostCount = () => {
+    const userPostCount: { [key: string]: { name: string; email: string; count: number; profilePhoto: string,
+      isVerified : boolean
+       } } = {};
+  
+    filteredPosts.forEach((post) => {
+      const { author } = post;
+      if (!userPostCount[author.email]) {
+        userPostCount[author.email] = { 
+          name: author.name, 
+          email: author.email, 
+          count: 0, 
+          profilePhoto: author.profilePhoto,
+          isVerified: author?.isVerified 
+        };
+      }
+      userPostCount[author.email].count += 1;
+    });
+  
+    return Object.values(userPostCount);
+  };
+  
+  const userPostCounts = getUserPostCount();
+ console.log(filteredPosts)
+  return (
+     <Container>
+      <h1 className="text-xl lg:text-3xl 2xl:text-5xl p-4">All Posts</h1>
+      <div className="md:grid md:grid-cols-5 md:gap-8">
+        {/* Filter Toggle for Mobile */}
+        <div className="md:hidden mb-4">
+          <button
+            className="bg-gradient-to-r from-blue-400 to-purple-500 text-default-500 px-4 py-2 rounded-md w-full flex items-center justify-center hover:shadow-lg transition-all duration-200"
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            <FaFilter className={`mr-2 transform transition-transform duration-200 ${showFilters ? "rotate-180" : "rotate-0"}`} />
+            {showFilters ? "Hide Filters" : "Show Filters"}
+          </button>
+        </div>
+
+        {/* Filter Section */}
+        <aside className="col-span-1 mb-6 md:mb-0">
+        <p className="text-2xl font-semibold mb-4">
+             Search & Filter
+          </p>
+        <div
+      className={`bg-default-100 shadow-lg rounded-lg p-6 transform transition-all duration-300 ease-in-out ${
+        showFilters ? "block" : "hidden md:block"
+      }`}
     >
       {/* Search Field */}
-      <div className="mb-4">
+      <div className="mb-6">
         <h3 className="font-semibold text-lg mb-2">Search</h3>
         <input
-          className="rounded-md px-4 py-2 w-full"
+          className="rounded-md px-4 py-2 w-full border border-default-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
           placeholder="Search by title, category, or author"
           type="text"
           value={searchQuery}
@@ -71,10 +117,10 @@ const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts }) => {
       </div>
 
       {/* Category Filter */}
-      <div className="mb-4">
+      <div className="mb-6">
         <h3 className="font-semibold text-lg mb-2">Category</h3>
         <select
-          className="rounded-md px-4 py-2 w-full"
+          className="rounded-md px-4 py-2 w-full border border-default-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
         >
@@ -87,21 +133,21 @@ const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts }) => {
       </div>
 
       {/* Upvotes Filter */}
-      <div className="mb-4">
+      <div className="mb-6">
         <h3 className="font-semibold text-lg mb-2">Minimum Upvotes</h3>
         <input
-          className="rounded-md px-4 py-2 w-full"
+          className="rounded-md px-4 py-2 w-full border border-default-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
           min="0"
           type="number"
           value={minUpvotes}
           onChange={(e) => setMinUpvotes(Number(e.target.value))}
         />
-        <p className="text-sm">Upvotes: {minUpvotes}</p>
+        <p className="text-sm mt-2">Upvotes: {minUpvotes}</p>
       </div>
 
       {/* Clear Filters */}
       <button
-        className="bg-red-500 text-white px-4 py-2 rounded-md w-full"
+        className="bg-gradient-to-r from-default-400 to-purple-600  px-4 py-2 rounded-md w-full hover:shadow-lg transition-all duration-200"
         onClick={() => {
           setSelectedCategory("All");
           setMinUpvotes(0);
@@ -111,61 +157,60 @@ const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts }) => {
         Clear Filters
       </button>
     </div>
-  );
-
-  return (
-    <div className="container mx-auto my-8 px-4">
-      <div className="md:grid md:grid-cols-4 md:gap-6">
-        {/* Filter Toggle for Mobile */}
-        <div className="md:hidden mb-4">
-          <button
-            className="bg-default-500  px-4 py-2 rounded-md w-full flex items-center justify-center"
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            <FaFilter className="mr-2" />{" "}
-            {showFilters ? "Hide Filters" : "Show Filters"}
-          </button>
-        </div>
-
-        {/* Filter Section */}
-        <aside className="col-span-1 mb-6 md:mb-0">
-          <FilterSection />
         </aside>
 
-        {/* Post and Layout Section */}
+        {/* Post Section */}
         <div className="col-span-3">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
-            <p className="text-2xl font-semibold mb-2 sm:mb-0">
-              {filteredPosts.length} Posts Found
-            </p>
-            {/* Layout Toggle */}
-            <div className="flex space-x-4">
-              <button
-                className={`p-2 ${layout === "grid" ? "bg-default-800 text-white" : "bg-white text-black"} rounded`}
-                onClick={() => setLayout("grid")}
-              >
-                <FaThLarge />
-              </button>
-              <button
-                className={`p-2 ${layout === "list" ? "bg-default-800 text-white" : "bg-white text-black"} rounded`}
-                onClick={() => setLayout("list")}
-              >
-                <FaThList />
-              </button>
-            </div>
-          </div>
+          <p className="text-2xl font-semibold mb-4">
+            {filteredPosts.length} Posts Found
+          </p>
 
           {/* Posts Display */}
-          <div
-            className={`grid ${layout === "grid" ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"} gap-6`}
-          >
+          <div className="grid grid-cols-1 gap-6 mb-4">
             {filteredPosts.map((post) => (
-              <PostCard key={post._id} layout={layout} post={post} />
+              <PostCard key={post._id} post={post} />
             ))}
           </div>
         </div>
+
+       {/* User-wise Post Count Section */}
+  <aside className="col-span-1 mt-6 md:mt-0">
+  <h3 className="text-2xl font-semibold mb-4">User Wise Post</h3>
+  <div className="bg-default-100 rounded-lg p-4 shadow-md">
+    {userPostCounts.map((user) => (
+      <div
+        key={user.email}
+        className="mb-4 p-4 border border-default-300 rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-200 bg-gradient-to-r from-default-300 to-purple-300 flex items-center"
+      >
+       
+        <div className="mx-auto px-4">
+        <div className="relative">
+                  <Avatar
+                    alt={`${user?.name}'s profile`}
+                    className={`rounded-full ${user?.isVerified === true ? "ring-4 ring-blue-500" : ""}`}
+                    size="lg"
+                    src={user?.profilePhoto}
+                  />
+                  {user?.isVerified === true && (
+                    <Badge
+                      className="absolute bottom-0 right-0"
+                      shape="circle"
+                      variant="flat"
+                    >
+                      <BsCheckCircle className="text-blue-500" />
+                    </Badge>
+                  )}
+                </div>
+          <p className="font-semibold text-lg">{user.name}</p>
+          <p className="text-sm ">{user.email}</p>
+          <p className="text-sm">Posts: {user.count}</p>
+        </div>
       </div>
-    </div>
+    ))}
+  </div>
+</aside>
+      </div>
+      </Container>
   );
 };
 

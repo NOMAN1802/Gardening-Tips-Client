@@ -3,8 +3,9 @@
 import Container from '@/src/components/Container/Container';
 import Loading from '@/src/components/Loading/Loading';
 import PageTitle from '@/src/components/PageTitle/PageTitle';
+import SectionTitle from '@/src/components/SectionTitle/SectionTitle';
 import { useUser } from '@/src/context/user.provider';
-import { useGetUsers, useChangeUserStatus } from '@/src/hooks/user.hook'; // Import your hook
+import { useGetUsers, useChangeUserStatus } from '@/src/hooks/user.hook'; 
 import { IUser } from '@/src/types';
 import { Avatar } from '@nextui-org/avatar';
 import { Button } from '@nextui-org/button';
@@ -51,13 +52,16 @@ const ManageUsers = () => {
   }
 
   return (
-    <Container>
-      <PageTitle heading="Manage Users" subHeading="Admin User Management" />
-      <div className="w-full overflow-x-auto">
+    <>
+    <PageTitle heading="Manage Users" subHeading="User Management" />
+     <Container>
+      <div className="w-full overflow-x">
+      
         {isLoading ? (
           <Loading />
         ) : otherUsers?.length ? (
           <>
+          <SectionTitle heading="Users List"/>
             <Table aria-label="All Users" className="min-w-full">
               <TableHeader>
                 <TableColumn className="hidden md:table-cell">IMAGE</TableColumn>
@@ -115,6 +119,8 @@ const ManageUsers = () => {
         )}
       </div>
     </Container>
+    </>
+   
   );
 };
 

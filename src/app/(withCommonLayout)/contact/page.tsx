@@ -1,10 +1,12 @@
+import Container from '@/src/components/Container/Container';
 import { Button } from '@nextui-org/button';
 import { Input, Textarea } from '@nextui-org/input';
 import React from 'react';
 
 const ContactUs = () => {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <Container>
+      <div className="mx-auto px-4 py-8">
       {/* Hero Section */}
       <div className="flex flex-col lg:flex-row justify-between items-center gap-8 mb-12">
         <div className="lg:w-1/2">
@@ -12,7 +14,7 @@ const ContactUs = () => {
         </div>
         <div className="lg:w-1/2 text-center lg:text-left">
           <h2 className="text-4xl font-bold mb-4">Enhance your gardening experience</h2>
-          <p className="mb-6 text-gray-600">
+          <p className="mb-6">
           Planto is a vibrant blogging platform dedicated to plant enthusiasts, offering insightful articles on plant care, gardening tips, and eco-friendly living.
           </p>
           <form className="flex flex-col gap-4">
@@ -83,6 +85,7 @@ const ContactUs = () => {
         </div>
       </div>
     </div>
+    </Container>
   );
 };
 

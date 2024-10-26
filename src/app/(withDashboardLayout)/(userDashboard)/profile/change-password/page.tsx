@@ -2,9 +2,11 @@
 import Container from "@/src/components/Container/Container";
 import { ChangePasswordForm } from "@/src/components/modules/Dashboard/ChangePassword/ChangePasswordForm";
 import PageTitle from "@/src/components/PageTitle/PageTitle";
+import SectionTitle from "@/src/components/SectionTitle/SectionTitle";
 import { useUser } from "@/src/context/user.provider";
 import axiosInstance from "@/src/lib/AxiosInstance";
 import React from "react";
+import { toast } from "sonner";
 
 
 const ChangePassword = () => {
@@ -22,8 +24,10 @@ const ChangePassword = () => {
       });
   
       if (response.data.success) {
+        toast.success("Password changed successfully")
         return { success: true };
       } else {
+        toast.error("Failed tp changed password")
         return { error: response.data.message || "Failed to change password" };
       }
     } catch (error) {
@@ -32,13 +36,15 @@ const ChangePassword = () => {
     }
   };
   return (
+    <>
+    <PageTitle heading="Change password" subHeading="Set new password"/>
     <Container>
-      <PageTitle heading="Change password" subHeading="Set new password"/>
-      <div className=" bg-default-100 shadow-lg p-8 rounded-md w-1/2 mx-auto mt-16">
         
         <ChangePasswordForm changePassword={changePassword} />
-      </div>
+      
     </Container>
+    </>
+    
   );
 };
 

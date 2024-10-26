@@ -15,10 +15,10 @@ const Category: React.FC<CategoryProps> = ({ posts }) => {
 
   return (
     
-    <div className="container mx-auto my-8">
-      <div className="grid grid-cols-4 gap-6">
+    <div className="mx-auto my-8 min-h-screen">
+      <div className="grid grid-cols-2 gap-6">
         {/* Post and Layout Section */}
-        <div className="col-span-3">
+        <div className="col-span-6">
           <div className="flex justify-between items-center mb-4">
             <p className="text-2xl font-semibold">{posts.length} Posts Found</p>
             {/* Layout Toggle */}
@@ -40,7 +40,7 @@ const Category: React.FC<CategoryProps> = ({ posts }) => {
 
           {/* Posts Display */}
           <div
-            className={`grid ${layout === "grid" ? "grid-cols-3" : "grid-cols-1"} gap-6`}
+            className={`grid ${layout === "grid" ? "grid-cols-2" : "grid-cols-1"} gap-6`}
           >
             {posts.map((post) => (
               <PostCard key={post._id} layout={layout} post={post} />

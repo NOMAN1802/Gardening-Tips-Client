@@ -55,6 +55,27 @@ const LoginPage = () => {
         heading="Login with Planto"
         subHeading="Welcome Back! Let&lsquo;s Get Started"
       />
+
+<motion.div
+  animate={{ y: [0, -10, 0] }}
+  className="w-2/3 mx-auto md:w-[30%] bg-default-100 rounded-lg p-4 shadow-md"
+  initial={{ y: 0 }}
+  transition={{
+    repeat: Infinity,
+    duration: 2,
+    ease: "easeInOut",
+    delay: 0.5,
+  }}
+>
+  <div className="mb-4 p-4 border border-default-300 rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-200 flex items-center">
+  <p className="text-lg">Demo:</p>
+    <div className="mx-auto px-4">
+      <p className="text-sm">Email: noman@gmail.com</p>
+      <p className="text-sm">Password: 123456</p>
+    </div>
+  </div>
+</motion.div>
+
       <div className="flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center">
         <motion.div
           animate={{ y: [0, -10, 0] }}

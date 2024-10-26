@@ -14,12 +14,16 @@ const HomePage = async() => {
 
   return (
     <div>
+      <Suspense fallback={<div className="text-center text-yellow-500">Loading Home Page...</div>}>
       <Slider />
+      </Suspense>
+      
+      
       <Suspense fallback={<div className="text-center text-yellow-500">Loading Home Page...</div>}>
         <PostCategories />
         </Suspense>
 
-       <Suspense fallback={<div className="text-center text-yellow-500">Loading Home Page...</div>}>
+       <Suspense fallback={<div className="text-center text-yellow-500">Loading Tranding Posts...</div>}>
          <TrandingPosts posts={posts?.data?.posts} />
         
         </Suspense>

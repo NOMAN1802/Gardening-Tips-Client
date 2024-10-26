@@ -6,7 +6,7 @@ import ProfileSettingForm from '../ProfileSettingForm/ProfileSettingForm'
 const UserSettings = () => {
   return (
     <>
-    <PageTitle heading='Settings' subHeading='Admin Profile setting'/>
+    <PageTitle heading='Settings' subHeading='My Profile setting'/>
     <ProfileSettingForm />
     </>
   )

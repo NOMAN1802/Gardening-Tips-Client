@@ -18,6 +18,8 @@ import { IUser } from "@/src/types";
 import { verifyUser } from "@/src/services/UserService";
 import PageTitle from "@/src/components/PageTitle/PageTitle";
 import { FaMailBulk } from "react-icons/fa";
+import Loading from "@/src/components/Loading/Loading";
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/table";
 
 const UserProfilePage = () => {
   const { user } = useUser();
@@ -71,13 +73,17 @@ const UserProfilePage = () => {
   };
 
   if (isLoading || !user || !currentUserData) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
-  console.log(currentUserData);
 
+console.log(otherUsers)
   return (
    <> 
-   <PageTitle heading="My Profile" subHeading="info"/>
+   
+   <PageTitle heading="My Dashboard" subHeading="info"/>
+   <div className="md:w-8/12 my-12">
+      <h3 className="text-4xl uppercase">My Informations</h3>
+    </div>
     <div className="flex flex-col sm:flex-row">
       {/* Left Side - Profile Section */}
       <div className="flex-1 p-6 text-default-900 bg-default-100 rounded-md">
@@ -87,9 +93,9 @@ const UserProfilePage = () => {
             {/* Profile Avatar with Verification */}
             <div className="relative">
               <Avatar
-                alt={`${currentUserData.name}'s profile`}
-                className={`rounded-full ${currentUserData.isVerified ? "ring-4 ring-blue-500" : ""}`}
-                src={currentUserData.profilePhoto}
+                alt={`${currentUserData?.name}'s profile`}
+                className={`rounded-full ${currentUserData?.isVerified ? "ring-4 ring-blue-500" : ""}`}
+                src={currentUserData?.profilePhoto}
               />
               {currentUserData?.isVerified === true && (
                 <Badge
@@ -131,14 +137,14 @@ const UserProfilePage = () => {
               </div>
             </div>
             {/* Verified Button */}
-            <div className="mt-4">
+            <div className="md:mt-4">
               <Button
                 className={`px-4 py-2 rounded-lg ${
                   currentUserData?.isVerified === true
                     ? "bg-blue-500 text-white"
                     : "bg-default-300 text-default-700 hover:bg-blue-400 hover:text-white"
                 }`}
-                disabled={currentUserData.isVerified}
+                disabled={currentUserData?.isVerified}
                 onClick={handleUserVerify}
               >
                 {currentUserData?.isVerified === true ? (
@@ -153,40 +159,50 @@ const UserProfilePage = () => {
           </div>
         </div>
 
-        {/* Followers Section */}
-        <div className="mt-6">
-          <h3 className="text-2xl font-bold mb-4">Your Following</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {currentUserData?.following?.map((followingId: string) => {
-              const followingUser = otherUsers?.find(
-                (u: IUser) => u?._id === followingId,
-              );
 
-              return followingUser ? (
-                <div
-                  key={followingUser?._id}
-                  className="bg-default-100 p-4 rounded-lg shadow-md flex items-center justify-between"
-                >
-                  <div className="flex items-center">
-                    <Avatar
-                      alt={`${followingUser?.name}'s profile`}
-                      className="rounded-full"
-                      size="sm"
-                      src={followingUser?.profilePhoto}
-                    />
-                    <span className="ml-2 font-semibold">
-                      {followingUser?.name}
-                    </span>
-                  </div>
-                </div>
-              ) : null;
-            })}
-          </div>
-        </div>
+        {/* Followers Section */}
+      
+  <div className="mt-6">
+  <h3 className="text-2xl font-bold mb-4">You are Following</h3>
+  <Table className="overflow-hidden">
+    <TableHeader>
+    <TableColumn>Image</TableColumn>
+      <TableColumn>Name</TableColumn>
+      <TableColumn className="hidden md:table-cell">Email</TableColumn>
+      <TableColumn className="hidden md:table-cell">Verified</TableColumn>
+      
+    </TableHeader>
+    <TableBody>
+      {currentUserData?.following?.map((followingId: string) => {
+        const followingUser = otherUsers?.find(
+          (u: IUser) => u?._id === followingId,
+        );
+
+        return followingUser ? (
+          <TableRow key={followingUser?._id}>
+            <TableCell>
+              <Avatar
+                alt={`${followingUser?.name}'s profile`}
+                className="rounded-full"
+                size="sm"
+                src={followingUser?.profilePhoto}
+              />
+            </TableCell>
+            <TableCell className="text-sm">{followingUser?.name}</TableCell>
+            <TableCell className="hidden md:table-cell text-sm">{followingUser?.email}</TableCell>
+            <TableCell className="hidden md:table-cell text-sm">{followingUser?.isVerified ? "Yes" : "No"}</TableCell>
+            
+          </TableRow>
+        ) : null;
+      })}
+    </TableBody>
+  </Table>
+</div>
+
       </div>
 
       {/* Right Side - People You May Follow Section */}
-      <div className="mt-10 sm:ml-6 sm:w-1/3">
+      <div className=" sm:ml-6 sm:w-1/3">
         <h3 className="text-2xl font-bold mb-4">People You May Follow</h3>
         <div className="grid grid-cols-1 gap-6">
           {otherUsers.map((otherUser: IUser) => (

@@ -253,7 +253,7 @@ export const getAllTrandingPosts = async (type?: string, wait = false) => {
   }
 
   const res = await fetch(
-    `${envConfig.baseApi}/posts?sortBy=-upVoats&limit=6`,
+    `${envConfig.baseApi}/posts?sortBy=-upVoats&limit=4&isPremium=false`,
     fetchOptions
   );
 
