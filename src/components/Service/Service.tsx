@@ -16,22 +16,22 @@ const Service = () => {
 
     const services = [
         {
-          icon: <AiOutlineSolution className="text-5xl text-white" />,
+          icon: <AiOutlineSolution className="text-5xl " />,
           label: "Expert Suggestion",
           description: "Choose the perfect solution of your problem.",
         },
         {
-          icon: <FaRegLightbulb className="text-5xl text-white" />,
+          icon: <FaRegLightbulb className="text-5xl " />,
           label: "Creative Idea",
           description: "Get creative idea for gardenning with us.",
         },
         {
-          icon: <IoPricetagsSharp className="text-5xl text-white" />,
+          icon: <IoPricetagsSharp className="text-5xl " />,
           label: "Permium content",
           description: "Premium content with minimum cost witht us",
         },
         {
-          icon: <FaMoneyCheckAlt className="text-5xl text-white" />,
+          icon: <FaMoneyCheckAlt className="text-5xl " />,
           label: "Done with Payment",
           description: "Complete the payment to varified your account.",
         },
@@ -44,18 +44,18 @@ const Service = () => {
           {services.map((service, index) => (
             <motion.div
               key={index}
-              className="bg-gradient-to-r from-default-400 via-default-500 to-blue-300 hover:shadow-2xl shadow-lg rounded-xl p-6 text-center relative overflow-hidden"
+              className="bg-default-200 hover:shadow-2xl shadow-lg rounded-xl p-6 text-center relative overflow-hidden"
               initial="hidden"
               animate="visible"
               variants={cardVariants}
               whileHover={{ scale: 1.05 }}
             >
               <div className="absolute inset-0 flex justify-center items-center opacity-20">
-                <div className="text-8xl text-white">{service.icon}</div>
+                <div className="text-8xl ">{service.icon}</div>
               </div>
               <div className="relative z-10">
-                <h3 className="text-2xl font-semibold mb-2 text-white">{service.label}</h3>
-                <p className="text-default-200 font-light">{service.description}</p>
+                <h3 className="text-2xl font-semibold mb-2 ">{service.label}</h3>
+                <p className="font-light text-sm">{service.description}</p>
               </div>
             </motion.div>
           ))}

@@ -4,7 +4,6 @@ import { Button } from "@nextui-org/button";
 import { Avatar } from "@nextui-org/avatar";
 import {
   BsCheckCircle,
-  BsArrowUpCircle,
   BsPersonPlus,
   BsPersonDash,
 } from "react-icons/bs";
@@ -14,20 +13,36 @@ import { toast } from "sonner";
 
 import { useUser } from "@/src/context/user.provider";
 import { useGetUsers, usePostActions } from "@/src/hooks/user.hook";
-import { IUser } from "@/src/types";
-import { verifyUser } from "@/src/services/UserService";
+import { IUser, TPost } from "@/src/types";
+import { myFavouritePost, verifyUser } from "@/src/services/UserService";
 import PageTitle from "@/src/components/PageTitle/PageTitle";
 import { FaMailBulk } from "react-icons/fa";
 import Loading from "@/src/components/Loading/Loading";
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/table";
+import { useQuery } from "@tanstack/react-query";
+import { PieChart, Pie, Cell } from 'recharts';
+import { useGetMyPosts } from "@/src/hooks/post.hook";
+
+interface PieChartData {
+  name: string;
+  value: number;
+}
 
 const UserProfilePage = () => {
   const { user } = useUser();
   const { data: usersData, isLoading, refetch } = useGetUsers();
-  const { handleFollow, handleUnfollow, isFollowing, isUnfollowing } =
-    usePostActions();
+  const { data: myPosts, isLoading: isLoadingPosts } = useGetMyPosts(user?._id as string);
+  const { handleFollow, handleUnfollow, isFollowing, isUnfollowing } = usePostActions();
   const router = useRouter();
 
+  const {
+    data: favoritePostsResponse,
+    isLoading: isFavouriteLoading,
+  } = useQuery({
+    queryKey: ["favoritePosts", user?._id],
+    queryFn: () => myFavouritePost(user?._id as string),
+    enabled: !!user?._id,
+  });
   const { currentUserData, otherUsers } = useMemo(() => {
     if (!usersData || !user) return { currentUserData: null, otherUsers: [] };
 
@@ -72,15 +87,28 @@ const UserProfilePage = () => {
     }
   };
 
-  if (isLoading || !user || !currentUserData) {
+  if (isLoading || !user || !currentUserData || isFavouriteLoading) {
     return <Loading />;
   }
+
+  const favoritePosts = favoritePostsResponse?.data || [];
+
+ // Prepare data for the pie chart based on upvotes from user's posts
+ const pieChartData: PieChartData[] = myPosts?.data?.reduce((acc: PieChartData[], post: { title: string; upVotes: number; }) => {
+  const existingPost = acc.find(item => item?.name === post?.title);
+  if (existingPost) {
+    existingPost.value += post?.upVotes; 
+  } else {
+    acc.push({ name: post?.title, value: post?.upVotes });
+  }
+  return acc;
+}, []) || [];
 
 console.log(otherUsers)
   return (
    <> 
    
-   <PageTitle heading="My Dashboard" subHeading="info"/>
+   <PageTitle heading="Dashboard" subHeading="my info"/>
    <div className="md:w-8/12 my-12">
       <h3 className="text-4xl uppercase">My Informations</h3>
     </div>
@@ -132,7 +160,7 @@ console.log(otherUsers)
               {/* Favorite Posts Count */}
               <div className="mt-2">
                 <span>
-                  Favorite Posts: {currentUserData?.favoritePosts?.length || 0}
+                  Favorite Posts: {favoritePosts?.length || 0}
                 </span>
               </div>
             </div>
@@ -197,9 +225,21 @@ console.log(otherUsers)
       })}
     </TableBody>
   </Table>
+  
+     {/* Pie Chart */}
+     <div className="bg-default-200 p-4 rounded-lg shadow-lg mt-6">
+              <h3 className="text-xl  font-semibold">Post-wise Upvotes</h3>
+              <PieChart width={400} height={200} className='mx-auto'>
+                <Pie data={pieChartData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} fill="#8884d8" dataKey="value">
+                  {pieChartData.map((_entry, index) => (
+                    <Cell key={`cell-${index}`} fill={`#${Math.floor(Math.random()*16777215).toString(16)}`} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </div>
 </div>
 
-      </div>
+ </div>
 
       {/* Right Side - People You May Follow Section */}
       <div className=" sm:ml-6 sm:w-1/3">

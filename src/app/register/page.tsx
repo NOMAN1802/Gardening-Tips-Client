@@ -54,26 +54,19 @@ const RegisterPage = () => {
   };
 
   return (
+   <>
+
+<PageTitle
+
+        heading="SingUp in Planto"
+        subHeading="Make the word ever green"/>
+
     <Container>
       {isPending && <Loading />}
 
-      <PageTitle
-        heading="Register with Planto"
-        subHeading="Make the word ever green together"
-      />
-
-      <div className="flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center">
-        <motion.div
-          animate={{ y: [0, -10, 0] }}
-          className="w-full md:w-[45%]"
-          initial={{ y: 0 }}
-          transition={{
-            repeat: Infinity,
-            duration: 2,
-            ease: "easeInOut",
-            delay: 0.5,
-          }}
-        >
+      <div className="flex h-[calc(100vh-80px)] w-full flex-col items-center justify-center">
+        <div
+          className="w-full md:w-[45%] bg-default-200 rounded-lg py-6" >
           <PLForm
             //! Only for development
             defaultValues={{
@@ -148,9 +141,10 @@ const RegisterPage = () => {
               </span>
             </p>
           </div>
-        </motion.div>
+        </div>
       </div>
     </Container>
+   </>
   );
 };
 

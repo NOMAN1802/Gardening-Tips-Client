@@ -173,42 +173,41 @@ const FilteredPosts: React.FC<FiltersPostsProps> = ({ posts }) => {
           </div>
         </div>
 
-       {/* User-wise Post Count Section */}
-  <aside className="col-span-1 mt-6 md:mt-0">
-  <h3 className="text-2xl font-semibold mb-4">User Wise Post</h3>
-  <div className="bg-default-100 rounded-lg p-4 shadow-md">
-    {userPostCounts.map((user) => (
-      <div
-        key={user.email}
-        className="mb-4 p-4 border border-default-300 rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-200 bg-gradient-to-r from-default-300 to-purple-300 flex items-center"
-      >
-       
-        <div className="mx-auto px-4">
-        <div className="relative">
-                  <Avatar
-                    alt={`${user?.name}'s profile`}
-                    className={`rounded-full ${user?.isVerified === true ? "ring-4 ring-blue-500" : ""}`}
-                    size="lg"
-                    src={user?.profilePhoto}
-                  />
-                  {user?.isVerified === true && (
-                    <Badge
-                      className="absolute bottom-0 right-0"
-                      shape="circle"
-                      variant="flat"
-                    >
-                      <BsCheckCircle className="text-blue-500" />
-                    </Badge>
-                  )}
+         {/* User-wise Post Count Section */}
+         <aside className="col-span-1 mt-6 md:mt-0">
+            <h3 className="text-2xl font-semibold mb-4">User Wise Post</h3>
+            <div className="bg-default-100 rounded-lg shadow-md">
+              {userPostCounts.map((user) => (
+                <div
+                  key={user.email}
+                  className="mb-4 p-2 border border-default-300 rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-200 bg-gradient-to-r from-default-300 to-purple-300 flex items-center"
+                >
+                  <div className="p-2">
+                    <div className="my-2">
+                      <Avatar
+                        alt={`${user?.name}'s profile`}
+                        className={`rounded-full ${user?.isVerified === true ? "ring-4 ring-blue-500" : ""}`}
+                        size="lg"
+                        src={user?.profilePhoto}
+                      />
+                      {user?.isVerified === true && (
+                        <Badge
+                          className="absolute bottom-0 right-0"
+                          shape="circle"
+                          variant="flat"
+                        >
+                          <BsCheckCircle className="text-blue-500" />
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="font-semibold text-sm">{user.name}</p>
+                    <p className="text-tiny">{user.email}</p>
+                    <p className="text-sm">Posts: {user.count}</p>
+                  </div>
                 </div>
-          <p className="font-semibold text-lg">{user.name}</p>
-          <p className="text-sm ">{user.email}</p>
-          <p className="text-sm">Posts: {user.count}</p>
-        </div>
-      </div>
-    ))}
-  </div>
-</aside>
+              ))}
+            </div>
+          </aside>
       </div>
       </Container>
   );

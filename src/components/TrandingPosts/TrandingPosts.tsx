@@ -17,7 +17,7 @@ const TrandingPosts: React.FC<PostCardProps> = ({ posts }) => {
     <Container>
       <SectionTitle heading='Tranding Posts'/>
           <div
-            className=" grid justify-center gap-10 sm:grid-cols-1 md:grid-cols-2"
+            className=" grid justify-center gap-10 sm:grid-cols-1 md:grid-cols-3"
           >
             {posts.map((post) => (
               <TrandingPostCard key={post._id}  post={post} />

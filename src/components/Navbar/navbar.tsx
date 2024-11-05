@@ -36,7 +36,7 @@ export const Navbar = () => {
   };
 
   return (
-    <NextUINavbar className="bg-opacity-50 bg-default-200 mx-auto xl:px-20 md:px-10 sm:px-2 px-4" maxWidth="2xl" position="sticky">
+    <NextUINavbar className="bg-opacity-90 bg-default-200 mx-auto xl:px-20 md:px-10 sm:px-2 px-4" maxWidth="2xl" position="sticky">
       {/* Left section with logo */}
       <NavbarContent className="basis-1/5" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">

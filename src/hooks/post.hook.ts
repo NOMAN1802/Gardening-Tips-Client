@@ -7,7 +7,6 @@ import {
   deleteComment,
   deletePost,
   editComment,
-  getAllPosts,
   getAllPostsClient,
   getMyPosts,
   getTrandingPosts,

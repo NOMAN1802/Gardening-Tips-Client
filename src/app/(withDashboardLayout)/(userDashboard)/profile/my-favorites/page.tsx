@@ -2,8 +2,6 @@
 
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-
-import Container from "@/src/components/Container/Container";
 import PageTitle from "@/src/components/PageTitle/PageTitle";
 import { useUser } from "@/src/context/user.provider";
 import PostCard from "@/src/components/PostCard/PostCard";

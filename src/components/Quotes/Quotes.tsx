@@ -61,7 +61,7 @@ const Quotes = () => {
 <div>
       <SectionTitle
         
-        heading={'Geneous Says that!!!'}
+        heading={'Geneous Says !'}
       />
       <div className="my-6">
         <Swiper
@@ -74,12 +74,11 @@ const Quotes = () => {
             <SwiperSlide key={qoute._id}>
               <div
                 
-                className='flex flex-col items-center bg-gradient-to-r from-default-200 via-default-300 to-blue-200 hover:shadow-2xl shadow-lg  rounded-xl'
-              >
+                className='flex flex-col items-center bg-default-200 hover:shadow-2xl shadow-lg  rounded-xl p-6'>
                 <img 
                   src={qoute.image} 
                   alt={qoute.name} 
-                  className='w-32 h-32 rounded-full object-cover mb-4 border-4 border-default-300' 
+                  className='w-32 h-32 rounded-full object-cover mb-4 border-2 border-blue-300' 
                 />
                 
                 <FaQuoteLeft className='mt-4 text-4xl text-default-600' />

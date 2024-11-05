@@ -10,8 +10,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { MdOutlineAttachEmail } from "react-icons/md";
 import { AiOutlineLock } from "react-icons/ai";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
-import { motion } from "framer-motion";
-
 import loginValidationSchema from "@/src/schemas/logoin.schema";
 import Loading from "@/src/components/Loading/Loading";
 import PLInput from "@/src/components/Form/PLInput";
@@ -49,24 +47,16 @@ const LoginPage = () => {
   };
 
   return (
-    <Container>
-      {isPending && <Loading />}
-      <PageTitle
+   <>
+    <PageTitle
         heading="Login with Planto"
         subHeading="Welcome Back! Let&lsquo;s Get Started"
       />
+    <Container>
+      {isPending && <Loading />}
+     
 
-<motion.div
-  animate={{ y: [0, -10, 0] }}
-  className="w-2/3 mx-auto md:w-[30%] bg-default-100 rounded-lg p-4 shadow-md"
-  initial={{ y: 0 }}
-  transition={{
-    repeat: Infinity,
-    duration: 2,
-    ease: "easeInOut",
-    delay: 0.5,
-  }}
->
+<div className="w-2/3 mx-auto md:w-[30%] bg-default-100 rounded-lg p-4 shadow-md">
   <div className="mb-4 p-4 border border-default-300 rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-200 flex items-center">
   <p className="text-lg">Demo:</p>
     <div className="mx-auto px-4">
@@ -74,20 +64,10 @@ const LoginPage = () => {
       <p className="text-sm">Password: 123456</p>
     </div>
   </div>
-</motion.div>
+</div>
 
-      <div className="flex h-[calc(100vh-200px)] w-full flex-col items-center justify-center">
-        <motion.div
-          animate={{ y: [0, -10, 0] }}
-          className="w-full md:w-[45%]"
-          initial={{ y: 0 }}
-          transition={{
-            repeat: Infinity,
-            duration: 2,
-            ease: "easeInOut",
-            delay: 0.5,
-          }}
-        >
+      <div className="flex h-[calc(100vh-100px)] w-full flex-col items-center justify-center">
+        <div className="w-full md:w-[45%] bg-default-200 rounded-lg py-6" >
           <PLForm
             resolver={zodResolver(loginValidationSchema)}
             onSubmit={onSubmit}
@@ -141,9 +121,10 @@ const LoginPage = () => {
               </Link>
             </div>
           </PLForm>
-        </motion.div>
+        </div>
       </div>
     </Container>
+   </>
   );
 };
 

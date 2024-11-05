@@ -18,7 +18,7 @@ const PostCategoryCard: React.FC<PostCategoryCardProps> = ({
     <motion.div
       animate={{ opacity: 1, y: 0 }}
       className={` bg-default-100 flex flex-col items-center justify-center p-4 border rounded-lg transition cursor-pointer
-        ${selected ? "border-blue-500 text-blue-500" : "border-gray-300 text-gray-600"}
+        ${selected ? "border-blue-500 text-blue-500" : "border-gray-300 "}
         hover:shadow-lg`}
       initial={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.5 }}
